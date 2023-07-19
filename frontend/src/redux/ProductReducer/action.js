@@ -1,7 +1,7 @@
 import axios from "axios"
 import { CAR_FAILURE, CAR_REQUEST, DELETE_CAR_SUCCESS, EDIT_CAR_SUCCESS, GET_CAR_SUCCSESS } from "./actionType";
 
-let url = "http://localhost:4500";
+let url = "https://buy-cars.onrender.com";
 
 export const getCars = (params) => (dispatch) =>{
         dispatch({type:CAR_REQUEST})
@@ -68,7 +68,7 @@ export const addCar = (payload) => (dispatch) =>{
    return axios.post(`${url}/inventory/add-car`,payload, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VycyI6ImxvZ2luIiwiaWF0IjoxNjg5NzYyMjYwfQ.TJqJfpXwmNQMiZK1gSAB7YZKrgKUvv3ptjMkUWjc_EY"}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
         .then((res) => {

@@ -1,12 +1,13 @@
 import axios from "axios"
 import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCSESS, SIGNUP_SUCCESS } from "./actionType";
 
-let url = "http://localhost:4500";
+let url = "https://buy-cars.onrender.com";
 
 export const fetchLogin = (payload) => (dispatch) => {
     dispatch({type:LOGIN_REQUEST})
     return axios.post(`${url}/user/login`,payload).then((res)=>{
         dispatch({type:LOGIN_SUCSESS,payload:res.data.token});
+        localStorage.setItem("token",res.data.token);
         console.log(res.data)
     }).catch((err)=>{ 
         console.log(err.response.data.Error)

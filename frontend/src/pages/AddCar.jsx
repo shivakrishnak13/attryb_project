@@ -48,7 +48,7 @@ const toast = useToast()
     const debounceTimer = setTimeout(() => {
       if (search !== "") {
         axios
-          .get(`http://localhost:4500/oem/specs?q=${search}`)
+          .get(`https://buy-cars.onrender.com/oem/specs?q=${search}`)
           .then((res) => {
             console.log(res.data);
             setOemSpecsData(res.data.specification);

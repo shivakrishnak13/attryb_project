@@ -174,7 +174,7 @@ const CarCard = ({
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme={'blue'} mr={3} onClick={handleUpdate}>
+            <Button backgroundColor={'blue'} mr={3} onClick={handleUpdate}>
             {!isLoading ? (
             "Submit"
           ) : (
@@ -216,7 +216,7 @@ const CarCard = ({
               <Button ref={cancelRef} onClick={onDeleteClose}>
                 Cancel
               </Button>
-              <Button colorScheme='red' onClick={handleDelete} ml={3}>
+              <Button backgroundColor={"red"} onClick={handleDelete} ml={3}>
               {!isLoading ? (
             "Delete"
           ) : (

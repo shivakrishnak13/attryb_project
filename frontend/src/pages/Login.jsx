@@ -5,11 +5,13 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "styled-components";
 import { fetchLogin } from "../redux/AuthReducer/action";
+import { useNavigate } from "react-router-dom";
 
 const intialstate = {
   email: "",
@@ -22,14 +24,23 @@ const Login = () => {
   const [credentail, setcredentail] = useState(intialstate);
   const dispatch = useDispatch();
   const { isLoading } = useSelector((store) => store.AuthReducer);
-
+   const toast = useToast();
+   const navigate = useNavigate()
   const handleChange = (e) => {
     const { name, value } = e.target;
     setcredentail({ ...credentail, [name]: value });
   };
 
   const handleLogin = () => {
-   dispatch(fetchLogin(credentail));
+   dispatch(fetchLogin(credentail)).then(()=>{
+       toast({
+        title:"Logged in successfully",
+        status:'success',
+        duration: 3000,
+        isClosable: true
+       });
+       navigate("/dealer")
+   });
   };
 
   return (

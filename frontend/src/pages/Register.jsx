@@ -1,8 +1,9 @@
-import { Box, Button, Heading, Input } from '@chakra-ui/react';
+import { Box, Button, Heading, Input, useToast } from '@chakra-ui/react';
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { styled } from 'styled-components';
 import { fetchregister } from '../redux/AuthReducer/action';
+import { useNavigate } from 'react-router-dom';
 
 const intialstate = {
     email: "",
@@ -16,7 +17,8 @@ const Register = () => {
   const [details,setDetails] = useState(intialstate)
   const [password,setpassord] = useState("")
   const [cpassword,csetpassord] = useState("")
-
+  const toast = useToast();
+  const navigate = useNavigate()
   const handleChange = (e) =>{
     const {name,value} = e.target;
     
@@ -26,7 +28,14 @@ const Register = () => {
 
   const handleLogin = () =>{
      if(password === cpassword){
-        dispatch(fetchregister(details));
+        dispatch(fetchregister(details)).then(()=>{
+            toast({
+                title:'Registration Successfull!',
+                status:'success',
+                isClosable:true
+            })
+            navigate("/login")
+        });
         // console.log('register',details)
      }else{
         alert("Password and Confirm Password should be same")
