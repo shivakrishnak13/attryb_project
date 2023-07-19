@@ -4,20 +4,30 @@ import { getCars } from '../redux/ProductReducer/action';
 import { styled } from 'styled-components';
 import CarCard from './CarCard';
 import { Button, Heading } from '@chakra-ui/react';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 const Products = () => {
     const [searchParams,_] = useSearchParams()
     const dispatch = useDispatch();
     const {cars,change} = useSelector((store)=> store.CarsReducer)
 
-    const colos = searchParams.getAll("colors");
+    const colors = searchParams.getAll("colors");
     const sort = searchParams.get("sort");
     const order = searchParams.get("order");
+    const location = useLocation();
+
+    let ParamObj={
+        params : {
+          color:colors,
+          sort: sort ,
+          order : order
+        }
+      }
+
 
     useEffect(()=> {
-       dispatch(getCars);
-    },[change])
+       dispatch(getCars(ParamObj));
+    },[change,location.search])
 
 
 

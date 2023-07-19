@@ -58,23 +58,23 @@ const Sidebar = () => {
       </Text>
       <div className="colorsfilter">
         <div className="checkbox">
-          <Checkbox value={"red"} onChange={handleColors} checked={colors.includes("red")}/>
+          <Checkbox value={"red"} onChange={handleColors} defaultChecked={colors.includes("red")}/>
           <label>Red</label>
         </div>
         <div className="checkbox">
-          <Checkbox value={"white"} onChange={handleColors} checked={colors.includes("white")}/>
+          <Checkbox value={"white"} onChange={handleColors} defaultChecked={colors.includes("white")}/>
           <label>White</label>
         </div>
         <div className="checkbox">
-          <Checkbox value={"yellow"} onChange={handleColors} checked={colors.includes("yellow")}/>
+          <Checkbox value={"yellow"} onChange={handleColors} defaultChecked={colors.includes("yellow")}/>
           <label>Yellow</label>
         </div>
         <div className="checkbox">
-          <Checkbox value={"silver"} onChange={handleColors} checked={colors.includes("silver")}/>
+          <Checkbox value={"silver"} onChange={handleColors} defaultChecked={colors.includes("silver")}/>
           <label>Silver</label>
         </div>
         <div className="checkbox">
-          <Checkbox value={"brown"} onChange={handleColors} checked={colors.includes("brown")}/>
+          <Checkbox value={"brown"} onChange={handleColors} defaultChecked={colors.includes("brown")}/>
           <label>Brown</label>
         </div>
       </div>
@@ -88,8 +88,8 @@ const Sidebar = () => {
          
         <RadioGroup onChange={(e)=> handleSort(e,"price")}>
             <Stack direction="row">
-              <Radio value="asc" isChecked={order === "asc"}>Ascending</Radio>
-              <Radio value="desc" isChecked={order === "desc"}>Descending</Radio>
+              <Radio value="asc" defaultChecked={order === "asc"}>Ascending</Radio>
+              <Radio value="desc" defaultChecked={order === "desc"}>Descending</Radio>
             </Stack>
           </RadioGroup>
         </div>
@@ -103,8 +103,8 @@ const Sidebar = () => {
         <div className="checkbox">
           <RadioGroup onChange={(e)=> handleSort(e,"mileage")}>
             <Stack direction="row">
-              <Radio value="asc" isChecked={order === "asc"}>Ascending</Radio>
-              <Radio value="desc" isChecked={order === "desc"}>Descending</Radio>
+              <Radio value="asc" defaultChecked={order === "asc"}>Ascending</Radio>
+              <Radio value="desc" defaultChecked={order === "desc"}>Descending</Radio>
             </Stack>
           </RadioGroup>
         </div>
