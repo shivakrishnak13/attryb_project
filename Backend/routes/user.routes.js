@@ -19,7 +19,7 @@ userRouter.post("/login", async (req,res)=>{
                             message:"Login successful!",token
                         })
                     }else{
-                        res.status(201).json({error:error.message})
+                        res.status(201).json({error})
                     }
                 })
             }else{

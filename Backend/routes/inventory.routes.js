@@ -48,7 +48,40 @@ inventoryRouter.get("/cars", async (req, res) => {
         { $sort: { "oemSpec.new_model_price": -1 } },
       ]);
       res.status(200).json({ data });
-    } else if (color) {
+    }if (sort === "mileage" && order === "asc") {
+      // sort by price ascending
+      let data = await InventoryModel.aggregate([
+        {
+          $lookup: {
+            from: "oem_specs",
+            localField: "oemSpecs",
+            foreignField: "_id",
+            as: "oemSpec",
+          },
+        },
+        { $unwind: "$oemSpec" },
+        { $sort: { "oemSpec.mileage": 1 } },
+      ]);
+      res.status(200).json({ data });
+    } else if (sort === "mileage" && order === "desc") {
+      // sort by price descending
+      let data = await InventoryModel.aggregate([
+        {
+          $lookup: {
+            from: "oem_specs",
+            localField: "oemSpecs",
+            foreignField: "_id",
+            as: "oemSpec",
+          },
+        },
+        { $unwind: "$oemSpec" },
+        { $sort: { "oemSpec.mileage": -1 } },
+      ]);
+      res.status(200).json({ data });
+    }
+    
+    
+    else if (color) {
       //filter by color
 
       const regex = new RegExp(color, "i");
@@ -90,6 +123,38 @@ inventoryRouter.get("/cars", async (req, res) => {
 
       const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
       res.status(200).json({ data });
+    }else if (color && sort === "mileage" && order === "asc") {
+      // Filter by color and sort by mileage ascending
+    
+      const regex = new RegExp(color, "i");
+    
+      const cdata = await InventoryModel.find({})
+        .populate({
+          path: "oemSpecs",
+          match: { colors: regex },
+        })
+        .sort({ "oemSpecs.mileage": 1 })
+        .exec();
+    
+      const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
+      res.status(200).json({ data });
+    
+    } else if (color && sort === "mileage" && order === "desc") {
+      // Filter by color and sort by mileage descending
+    
+      const regex = new RegExp(color, "i");
+    
+      const cdata = await InventoryModel.find({})
+        .populate({
+          path: "oemSpecs",
+          match: { colors: regex },
+        })
+        .sort({ "oemSpecs.mileage": -1 })
+        .exec();
+    
+      const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
+      res.status(200).json({ data });
+    
     } else {
       let data = await InventoryModel.find({}).populate({ path: "oemSpecs" });
 
