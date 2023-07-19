@@ -105,12 +105,15 @@ inventoryRouter.patch("/edit-car/:id", async (req,res)=>{
         const {id} = req.params;
     try {
 
-        
+        const editeddata = await InventoryModel.findByIdAndUpdate({_id:id},req.body);
 
+            res.status(200).json({msg:"details updated succesfull",editeddata})
         
     } catch (error) {
         res.status(201).json({ error: error.message });
     }
 })
+
+
 
 module.exports = { inventoryRouter };
