@@ -38,7 +38,7 @@ export default Navbar;
 const DIV = styled.div`
     width: 100%;
     height: 65px;
-    background-color: aqua;
+    background-color: #B3E5FC;
     position: static;
     top: 0;
     left: 0;

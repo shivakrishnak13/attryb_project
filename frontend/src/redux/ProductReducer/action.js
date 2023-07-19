@@ -62,6 +62,21 @@ export const deleteCar = (id) => (dispatch) =>{
 };
 
 
-export const addCar = ()=>{
-    
+export const addCar = (payload) => (dispatch) =>{
+
+    dispatch({type:CAR_REQUEST})
+   return axios.post(`${url}/inventory/add-car`,payload, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VycyI6ImxvZ2luIiwiaWF0IjoxNjg5NzYyMjYwfQ.TJqJfpXwmNQMiZK1gSAB7YZKrgKUvv3ptjMkUWjc_EY"}`,
+        },
+      })
+        .then((res) => {
+          dispatch({ type: EDIT_CAR_SUCCESS});
+          
+          console.log(res.data);
+        })
+        .catch((err) => {
+          dispatch({ type: CAR_FAILURE });
+        });
 }

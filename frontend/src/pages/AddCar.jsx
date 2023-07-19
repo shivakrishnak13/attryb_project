@@ -6,12 +6,17 @@ import {
   Heading,
   Input,
   Select,
+  Spinner,
   Text,
   Textarea,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
+import { addCar } from "../redux/ProductReducer/action";
+import { useDispatch, useSelector } from "react-redux";
 
 const intialstate = {
   title: "",
@@ -29,15 +34,16 @@ const intialstate = {
 const AddCar = () => {
   const [car, setData] = useState(intialstate);
   const [search, setsearch] = useState("");
-  const [oempsecs, setOemSpecs] = useState([]);
+  const [oempsecs, setOemSpecsData] = useState([]);
   const [model, setModel] = useState("");
   const [oemSpecs,setoemSpecs] = useState("")
-
+  const dispatch = useDispatch();
+const toast = useToast()
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData({ ...car, [name]: value });
   };
-
+ const {isLoading} = useSelector((store) => store.CarsReducer)
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
       if (search !== "") {
@@ -45,7 +51,7 @@ const AddCar = () => {
           .get(`http://localhost:4500/oem/specs?q=${search}`)
           .then((res) => {
             console.log(res.data);
-            setOemSpecs(res.data.specification);
+            setOemSpecsData(res.data.specification);
           })
           .catch((err) => console.log(err));
       }
@@ -59,7 +65,28 @@ const AddCar = () => {
 
 
   const handleAddCar = () =>{
-      
+
+if(car.oemSpecs !== "" && car.description !== "" && car.image !=="" && car.description!=="" && car.kmOnOdometer!=="" && car.originalPaint!=="" && car.majorScratches!=="" && car.previousBuyers!=="" && car.registrationPlace!=="" ){
+    dispatch(addCar(car)).then((res)=>{
+      toast({
+          title:"Successfully Added",
+          status:"succsess",
+          duration:3000,
+          isClosable:true
+      })
+    })
+
+}else{
+    console.log(oemSpecs)
+    console.log(car.oemSpecs)
+    toast({
+        title:"Please fill all fields",
+        status:"warning",
+        duration:3000,
+        isClosable:true
+    })
+}
+
   }
 
   return (
@@ -87,7 +114,7 @@ const AddCar = () => {
                   onClick={() => {
                     setModel(`${el.model_name}, ${el.year}, ${el.colors}`);
                     setoemSpecs(el._id);
-                    setData( {...car,oemSpecs});
+                    setData( {...car,oemSpecs:el._id});
                     setsearch("")
                   }}
                 >
@@ -203,8 +230,12 @@ const AddCar = () => {
           </Select>
         </FormControl>
 
-        <Button mt={"20px"} colorScheme={"green"} onClick={handleAddCar}>
-          ADD
+        <Button mt={"20px"} backgroundColor={"green"} onClick={handleAddCar}>
+        {!isLoading ? (
+            "ADD"
+          ) : (
+           "Adding..."
+            )}
         </Button>
       </div>
     </DIV>
