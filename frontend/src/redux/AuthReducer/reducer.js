@@ -1,4 +1,4 @@
-import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCSESS } from "./actionType";
+import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCSESS, SIGNUP_SUCCESS } from "./actionType";
 
 const intialstate = {
     isAuth:false,
@@ -32,7 +32,12 @@ export const reducer = (state= intialstate,{type,payload}) => {
                 isError : true,
                 errorMessage : payload
             }
-    
+        case SIGNUP_SUCCESS:
+            return {
+                ...state,
+                isLoading:false,
+                isError:false
+            }
         default:
             return state;
     }
