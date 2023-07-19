@@ -127,6 +127,17 @@ try {
 }
 })
 
+inventoryRouter.get("/single-car/:id", async (req,res)=>{
+    const {id} = req.params;
+try {
 
+    const data = await InventoryModel.find({_id:id}).populate({path: "oemSpecs"});
+
+        res.status(200).json({msg:"car details",data})
+    
+} catch (error) {
+    res.status(201).json({ error: error.message });
+}
+})
 
 module.exports = { inventoryRouter };
