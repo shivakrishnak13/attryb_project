@@ -114,6 +114,19 @@ inventoryRouter.patch("/edit-car/:id", async (req,res)=>{
     }
 })
 
+inventoryRouter.delete("/delete-car/:id", async (req,res)=>{
+    const {id} = req.params;
+try {
+
+    const deleteddata = await InventoryModel.findByIdAndDelete({_id:id});
+
+        res.status(200).json({msg:"details updated succesfull",deleteddata})
+    
+} catch (error) {
+    res.status(201).json({ error: error.message });
+}
+})
+
 
 
 module.exports = { inventoryRouter };
