@@ -5,6 +5,7 @@ import Login from './Login'
 import DealersPage from './DealersPage'
 import UsersPage from './UsersPage'
 import Register from './Register'
+import AddCar from './AddCar'
 
 const AllRoutes = () => {
 
@@ -15,6 +16,7 @@ const AllRoutes = () => {
         <Route path='/dealers' element={<DealersPage/>} />
         <Route path='/users' element={<UsersPage/>} />
         <Route path='/register' element={<Register/>} />
+        <Route path='/add-car' element={<AddCar/>} />
     </Routes>
   )
 }

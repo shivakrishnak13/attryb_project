@@ -4,7 +4,7 @@ import { getCars } from '../redux/ProductReducer/action';
 import { styled } from 'styled-components';
 import CarCard from './CarCard';
 import { Button, Heading } from '@chakra-ui/react';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 
 const Products = () => {
     const [searchParams,_] = useSearchParams()
@@ -39,7 +39,7 @@ const Products = () => {
             <h1></h1>
          <Heading ml={"150px"}>All Cars</Heading>
           <Button colorScheme={"blue"}>
-            Add New car
+           <Link to={"/add-car"}> Add New car</Link>
           </Button>
         </div>
         <div className='main'>

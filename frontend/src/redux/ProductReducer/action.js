@@ -59,4 +59,9 @@ export const deleteCar = (id) => (dispatch) =>{
         .catch((err) => {
           dispatch({ type: CAR_FAILURE });
         });
+};
+
+
+export const addCar = ()=>{
+    
 }
