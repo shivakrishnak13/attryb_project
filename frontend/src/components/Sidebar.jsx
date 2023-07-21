@@ -109,6 +109,7 @@ const Sidebar = () => {
           </RadioGroup>
         </div>
       </div>
+      
 
       <Button mt={"30px"} >Reset Filters</Button>
     </DIV>

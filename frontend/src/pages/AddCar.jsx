@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   FormControl,
   FormLabel,
   Heading,
@@ -230,13 +229,13 @@ if(car.oemSpecs !== "" && car.description !== "" && car.image !=="" && car.descr
           </Select>
         </FormControl>
 
-        <Button mt={"20px"} backgroundColor={"green"} onClick={handleAddCar}>
+        <button style={{backgroundColor:"blue",color:"white",marginTop:"10px"}} onClick={handleAddCar}>
         {!isLoading ? (
             "ADD"
           ) : (
            "Adding..."
             )}
-        </Button>
+        </button>
       </div>
     </DIV>
   );

@@ -1,17 +1,10 @@
-import {
-  Box,
-  Button,
-  Heading,
-  Input,
-  InputGroup,
-  InputRightElement,
-  useToast,
-} from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "styled-components";
 import { fetchLogin } from "../redux/AuthReducer/action";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import the CSS for toast styles
 
 const intialstate = {
   email: "",
@@ -24,63 +17,65 @@ const Login = () => {
   const [credentail, setcredentail] = useState(intialstate);
   const dispatch = useDispatch();
   const { isLoading } = useSelector((store) => store.AuthReducer);
-   const toast = useToast();
-   const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setcredentail({ ...credentail, [name]: value });
   };
 
   const handleLogin = () => {
-   dispatch(fetchLogin(credentail)).then(()=>{
-       toast({
-        title:"Logged in successfully",
-        status:'success',
-        duration: 3000,
-        isClosable: true
-       });
-       navigate("/dealer")
-   });
+    dispatch(fetchLogin(credentail)).then(() => {
+      toast.success("Logged in successfully", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      navigate("/dealers");
+    });
   };
 
   return (
-    <DIV>
-      <Heading>Please Login</Heading>
+    <StyledDiv>
+      <h2>Please Login</h2>
       <div className="loginform">
-        <Box>
-          <Input
+        <div>
+          <input
             placeholder="Enter your Email"
             type="email"
-            mt={"10px"}
             name="email"
             onChange={handleChange}
           />
-          <InputGroup size="md" mt={"10px"}>
-            <Input
-              pr="4.5rem"
-              type={show ? "text" : "password"}
-              placeholder="Enter password"
-              name="password"
-              onChange={handleChange}
-            />
-            <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleClick}>
-                {show ? "Hide" : "Show"}
-              </Button>
-            </InputRightElement>
-          </InputGroup>
-          <Button colorScheme={"teal"} mt={"10px"}   onClick={handleLogin}>
-            {isLoading? "Loading..." : "Login"}
-          </Button>
-        </Box>
+        </div>
+        <div className="input-group">
+          <input
+            type={show ? "text" : "password"}
+            placeholder="Enter password"
+            name="password"
+            onChange={handleChange}
+          />
+          <div className="input-right-element">
+            <button onClick={handleClick}>
+              {show ? "Hide" : "Show"}
+            </button>
+          </div>
+        </div>
+        <button className="button" onClick={handleLogin}>
+          {isLoading ? "Loading..." : "Login"}
+        </button>
       </div>
-    </DIV>
+      <ToastContainer /> {/* Add ToastContainer at the root level */}
+    </StyledDiv>
   );
 };
 
 export default Login;
 
-const DIV = styled.div`
+const StyledDiv = styled.div`
   h2 {
     margin-top: 50px;
   }
@@ -92,5 +87,21 @@ const DIV = styled.div`
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
       rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
     border-radius: 1rem;
+  }
+  .loginform {
+    margin-top: 10px;
+  }
+  .input-group {
+    margin-top: 10px;
+  }
+  .input-group input {
+    padding-right: 4.5rem;
+  }
+  .input-group button {
+    height: 1.75rem;
+  }
+  .button {
+    margin-top: 10px;
+    background-color: teal;
   }
 `;

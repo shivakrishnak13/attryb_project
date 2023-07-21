@@ -84,7 +84,7 @@ const Register = () => {
                 }}
               />
               
-              <Button colorScheme={"teal"} mt={"15px"}  onClick={handleLogin} >
+              <Button colorScheme='teal' backgroundColor={"teal"} mt={"15px"}  onClick={handleLogin} >
                Register
               </Button>
             </Box>

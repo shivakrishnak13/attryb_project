@@ -38,7 +38,7 @@ const Products = () => {
         <div className='haeading'>
             <h1></h1>
          <Heading ml={"150px"}>All Cars</Heading>
-          <Button colorScheme={"blue"}>
+          <Button backgroundColor={"blue"}>
            <Link to={"/add-car"}> Add New car</Link>
           </Button>
         </div>

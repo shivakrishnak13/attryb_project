@@ -107,8 +107,8 @@ const CarCard = ({
       </div>
 
       <div className="btns">
-        <Button colorScheme={"purple"} onClick={onEditOpen}>Edit</Button>
-        <Button colorScheme={"red"} onClick={onDeleteOpen} >Delete</Button>
+        <Button backgroundColor={"purple"} onClick={onEditOpen}>Edit</Button>
+        <Button backgroundColor={"red"} onClick={onDeleteOpen} >Delete</Button>
       </div>
         {/* Edit Modal */}
 
