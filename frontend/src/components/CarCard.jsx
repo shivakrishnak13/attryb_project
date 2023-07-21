@@ -1,11 +1,13 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, FormControl, FormLabel, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spinner, Stat, StatLabel, StatNumber, Text, Textarea, useDisclosure, useToast } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { styled } from "styled-components";
+import styled from "styled-components";
 import { deleteCar, editCar } from "../redux/ProductReducer/action";
+import Modal from "react-modal";
+import { BsX } from "react-icons/bs";
+import { AiFillCheckCircle } from "react-icons/ai";
 
 const CarCard = ({
-    _id,
+  _id,
   accidentsReported,
   description,
   image,
@@ -14,198 +16,148 @@ const CarCard = ({
   title,
   previousBuyers,
   registrationPlace,
-  originalPaint
+  originalPaint,
 }) => {
+  const { isLoading } = useSelector((store) => store.CarsReducer);
+  const dispatch = useDispatch();
+  const intialstate = {
+    title,
+    description,
+    image,
+    kmOnOdometer,
+    majorScratches,
+    accidentsReported,
+    previousBuyers,
+    registrationPlace,
+    originalPaint,
+  };
 
-    const { isOpen: isEditOpen , onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
-    const { isOpen: isDeleteOpen , onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure()
-    const {isLoading} = useSelector((store) => store.CarsReducer);
-    const cancelRef = useRef()
-    const initialRef = useRef(null)
-    const finalRef = useRef(null);
-    const dispatch = useDispatch();
-    const intialstate ={
-        
-        title,
-        description,
-        image,
-        kmOnOdometer,
-        majorScratches,
-        accidentsReported,
-        previousBuyers,
-        registrationPlace,
-        originalPaint
-    }
+  const [car, setCarDetails] = useState(intialstate);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  // const toast = useToast()
 
-    const toast = useToast()
+  const handleChange = (event) => {
+    setCarDetails({ ...car, [event.target.name]: event.target.value });
+  };
 
-    const [car,setCarDetails] = useState(intialstate);
+  const handleUpdate = () => {
+    dispatch(editCar(car, _id)).then(() => {
+      setIsEditOpen(false);
+     
+    });
+  };
 
-    const handleChange = (event) => {
-        setCarDetails({...car,[event.target.name]: event.target.value});
-    }
-
-    const handleUpdate = () =>{
-        dispatch(editCar(car,_id)).then(()=>{
-            onEditClose();
-            toast({
-                title: `"Updated Car Details"`,
-                status: "succsess",
-                isClosable: true,
-              });
-        });
-    }
-
-    const handleDelete = () =>{
-        dispatch(deleteCar(_id)).then(()=>{
-            onDeleteClose();
-            toast({
-                title: `Deleted "${title}"`,
-                description:"The car has been deleted from your inventory.",
-                status: "error",
-                isClosable:true
-            })
-        })
-    }
+  const handleDelete = () => {
+    dispatch(deleteCar(_id)).then(() => {
+      setIsDeleteOpen(false);
+      
+    });
+  };
 
   return (
-    <DIV>
-      <div>
-        <Image borderTopLeftRadius={"0.8rem"} borderTopRightRadius={"0.8rem"} src={image} alt="img" />
-      </div>
-
+    <CarCardContainer>
+      <CarImage src={image} alt="img" />
       <div className="title">
-        <Text fontSize={"18px"} fontWeight={"bold"} textAlign={"start"}>{title}</Text>
-        <Text mt={"8px"} fontSize={"13px"} textAlign={"start"}>{description}</Text>
+        <h3>{title}</h3>
+        <p>{description}</p>
       </div>
-     
+
       <div className="car-inventory">
-        <Stat backgroundColor={"#FAFAFA"} borderRadius={"0.7rem"} boxShadow= "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" p={"5px"} mr={"10px"}>
-          <StatLabel fontSize={"12px"}>Accidents Reported</StatLabel>
-          <StatNumber fontSize={"16px"}>{accidentsReported}</StatNumber>
-        </Stat>
-        <Stat backgroundColor={"#FAFAFA"} borderRadius={"0.7rem"} boxShadow= "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" p={"5px"} mr={"10px"}>
-          <StatLabel fontSize={"12px"}>Km On OdoMeter</StatLabel>
-          <StatNumber fontSize={"16px"}>{kmOnOdometer}</StatNumber>
-        </Stat>
-        <Stat backgroundColor={"#FAFAFA"} borderRadius={"0.7rem"} boxShadow= "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" p={"5px"} mt={"10px"} mr={"10px"}>
-          <StatLabel fontSize={"12px"}>Major Scratches</StatLabel>
-          <StatNumber fontSize={"16px"}>{majorScratches}</StatNumber>
-        </Stat>
-        <Stat backgroundColor={"#FAFAFA"} borderRadius={"0.7rem"} boxShadow= "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" p={"5px"} mt={"10px"} mr={"10px"}>
-          <StatLabel fontSize={"12px"}>Previous Buyers</StatLabel>
-          <StatNumber fontSize={"16px"}>{previousBuyers}</StatNumber>
-        </Stat>
-        <Stat backgroundColor={"#FAFAFA"} borderRadius={"0.7rem"} boxShadow= "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" p={"5px"} mt={"10px"} mr={"10px"}>
-          <StatLabel fontSize={"12px"}>Registration Place</StatLabel>
-          <StatNumber fontSize={"16px"}>{registrationPlace}</StatNumber>
-        </Stat>
-        <Stat backgroundColor={"#FAFAFA"} borderRadius={"0.7rem"} boxShadow= "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" p={"5px"} mt={"10px"} mr={"10px"}>
-          <StatLabel fontSize={"12px"}> Original Paint</StatLabel>
-          <StatNumber fontSize={"20px"}>{ originalPaint}</StatNumber>
-        </Stat>
+        <div>
+          <span>Accidents Reported</span>
+          <p>{accidentsReported}</p>
+        </div>
+        <div>
+          <span>Km On OdoMeter</span>
+          <p>{kmOnOdometer}</p>
+        </div>
+        <div>
+          <span>Major Scratches</span>
+          <p>{majorScratches}</p>
+        </div>
+        <div>
+          <span>Previous Buyers</span>
+          <p>{previousBuyers}</p>
+        </div>
+        <div>
+          <span>Registration Place</span>
+          <p>{registrationPlace}</p>
+        </div>
+        <div>
+          <span>Original Paint</span>
+          <p>{originalPaint}</p>
+        </div>
       </div>
-
+{/* 
       <div className="btns">
-        <Button backgroundColor={"purple"} onClick={onEditOpen}>Edit</Button>
-        <Button backgroundColor={"red"} onClick={onDeleteOpen} >Delete</Button>
-      </div>
-        {/* Edit Modal */}
+        <Button backgroundColor={"purple"} onClick={() => setIsEditOpen(true)}>
+          Edit
+        </Button>
+        <Button backgroundColor={"red"} onClick={() => setIsDeleteOpen(true)}>
+          Delete
+        </Button>
+      </div> */}
 
-
-
-        <Modal
-        initialFocusRef={initialRef}
-        finalFocusRef={finalRef}
+      {/* Edit Modal */}
+      {/* <StyledModal
         isOpen={isEditOpen}
-        onClose={onEditClose}
+        onRequestClose={() => setIsEditOpen(false)}
       >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Edit Car Details</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
-            <FormControl>
-              <FormLabel>Title</FormLabel>
-              <Input ref={initialRef} placeholder='title' onChange={handleChange} value={car.title} name="title" />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Description</FormLabel>
-              <Textarea placeholder='Description' onChange={handleChange} value={car.description} name="description" />
-            </FormControl>
-
-
-            <FormControl mt={4}>
-              <FormLabel>km On Odometer</FormLabel>
-              <Input placeholder='kmOnOdometer' onChange={handleChange} value={car.kmOnOdometer} name="kmOnOdometer" />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Major Scratches</FormLabel>
-              <Input placeholder='Major Scratches' onChange={handleChange} value={car.majorScratches} name="majorScratches" />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Accidents Reported</FormLabel>
-              <Input placeholder='Accidents Reported' onChange={handleChange} value={car.accidentsReported} name="accidentsReported" />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Previous Buyers</FormLabel>
-              <Input placeholder='Previous Buyers' onChange={handleChange} value={car.previousBuyers} name="previousBuyers" />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Registration Place</FormLabel>
-              <Input placeholder='Registration Place' onChange={handleChange} value={car.registrationPlace} name="registrationPlace" />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Original Paint</FormLabel>
-             <Select  placeholder='Original Paint' onChange={handleChange} value={car.originalPaint} name="originalPaint">
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-             </Select>
-            </FormControl>
-
-
-
-          </ModalBody>
-
-          <ModalFooter>
-            <Button backgroundColor={'blue'} mr={3} onClick={handleUpdate}>
-            {!isLoading ? (
-            "Submit"
-          ) : (
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="gray.200"
-              color="blue.500"
-              size="md"
+        <ModalHeader>Edit Car Details</ModalHeader>
+        <ModalCloseButton onClick={() => setIsEditOpen(false)} />
+        <ModalBody>
+          <FormControl>
+            <FormLabel>Title</FormLabel>
+            <Input
+              placeholder="title"
+              onChange={handleChange}
+              value={car.title}
+              name="title"
             />
-          )}
-            </Button>
-            <Button onClick={onEditClose}>Cancel</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+          </FormControl>
 
+          <FormControl mt={4}>
+            <FormLabel>Description</FormLabel>
+            <Textarea
+              placeholder="Description"
+              onChange={handleChange}
+              value={car.description}
+              name="description"
+            />
+          </FormControl> */}
 
+          {/* Rest of the form controls */}
+          {/* ... */}
+        {/* </ModalBody>
 
+        <ModalFooter>
+          <Button
+            backgroundColor={"blue"}
+            mr={3}
+            onClick={handleUpdate}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="md" />
+            ) : (
+              "Submit"
+            )}
+          </Button>
+          <Button onClick={() => setIsEditOpen(false)}>Cancel</Button>
+        </ModalFooter>
+      </StyledModal> */}
 
-
-       {/* Delete Modal */}
-      <AlertDialog
+      {/* Delete Modal */}
+      {/* <AlertDialog
         isOpen={isDeleteOpen}
         leastDestructiveRef={cancelRef}
-        onClose={onDeleteClose}
+        onClose={() => setIsDeleteOpen(false)}
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
-            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              Delete Customer
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Delete Car
             </AlertDialogHeader>
 
             <AlertDialogBody>
@@ -213,54 +165,162 @@ const CarCard = ({
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onDeleteClose}>
+              <Button ref={cancelRef} onClick={() => setIsDeleteOpen(false)}>
                 Cancel
               </Button>
-              <Button backgroundColor={"red"} onClick={handleDelete} ml={3}>
-              {!isLoading ? (
-            "Delete"
-          ) : (
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="gray.200"
-              color="blue.500"
-              size="md"
-            />
-          )}
+              <Button
+                backgroundColor={"red"}
+                onClick={handleDelete}
+                ml={3}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="md" />
+                ) : (
+                  "Delete"
+                )}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialogOverlay>
-      </AlertDialog>
-    </DIV>
+      </AlertDialog> */}
+    </CarCardContainer>
   );
 };
 
 export default CarCard;
 
-const DIV = styled.div`
-box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-border-radius: 1rem;
+const CarCardContainer = styled.div`
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  border-radius: 1rem;
 
-.title{
+  .title {
     padding-left: 15px;
     margin-top: 15px;
-}
 
-.car-inventory{
-     padding-left: 15px;
-     margin-top: 15px;
+    h3 {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: start;
+    }
+
+    p {
+      margin-top: 8px;
+      font-size: 13px;
+      text-align: start;
+    }
+  }
+
+  .car-inventory {
+    padding-left: 15px;
+    margin-top: 15px;
     display: grid;
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 5px;
-}
-.btns{
+
+    div {
+      background-color: #fafa;
+      border-radius: 0.7rem;
+      box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+      padding: 5px;
+      margin-right: 10px;
+      margin-top: 10px;
+
+      span {
+        font-size: 12px;
+      }
+
+      p {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .btns {
     margin-top: 20px;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     margin-bottom: 20px;
-}
+  }
+`;
 
+const StyledModal = styled(Modal)`
+  .ModalContent {
+    width: 400px;
+    margin: auto;
+    border-radius: 0.6rem;
+    background-color: white;
+    padding: 15px;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+      rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  }
+
+  .ModalHeader {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .ModalCloseButton {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: #b5b5b5;
+    font-size: 18px;
+  }
+
+  .ModalBody {
+    padding: 0 10px;
+
+    label {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #b5b5b5;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+  }
+
+  .ModalFooter {
+    text-align: center;
+    margin-top: 20px;
+
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      color: white;
+      transition: background-color 0.2s ease-in-out;
+
+      &:hover {
+        background-color: #2d66da;
+      }
+
+      &:not(:first-child) {
+        margin-left: 10px;
+      }
+    }
+  }
+`;
+
+const CarImage = styled.img`
+  border-top-left-radius: 0.8rem;
+  border-top-right-radius: 0.8rem;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
 `;

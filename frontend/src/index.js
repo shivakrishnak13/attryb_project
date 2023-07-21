@@ -7,15 +7,15 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import 'bootstrap/dist/css/bootstrap.min.css'; 
-import { ChakraProvider } from "@chakra-ui/react";
+import { ToastContainer } from "react-toastify";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <ChakraProvider >
     <BrowserRouter>
+   
         <App />
+   
     </BrowserRouter>
-    </ChakraProvider>
   </Provider>
 );
 

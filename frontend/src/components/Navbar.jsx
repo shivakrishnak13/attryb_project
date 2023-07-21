@@ -52,6 +52,12 @@ const DIV = styled.div`
   z-index: 12;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 
+  a{
+    text-decoration:none;
+    color: black;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
   .main-div {
     display: flex;
     height: 75px;
