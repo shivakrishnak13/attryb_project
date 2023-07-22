@@ -163,7 +163,7 @@ inventoryRouter.get("/cars", async (req, res) => {
       let data = await InventoryModel.find({}).populate({ path: "oemSpecs" }).sort({ price: -1 }).exec();
       return res.status(200).json({ data });
     }
-    if (mileage === "asc") {
+    else if (mileage === "asc") {
       // sort by price ascending
       let data = await InventoryModel.aggregate([
         {
