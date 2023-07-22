@@ -62,57 +62,58 @@ inventoryRouter.get("/cars", async (req, res) => {
     }
     
     
-    else if (color) {
+    else if (color.length!==0) {
       //filter by color
 
-      const regex = new RegExp(color, "i");
+      const regexColors = color.map((color) => new RegExp(color, "i"));
 
-      const cdata = await InventoryModel.find({})
-        .populate({ path: "oemSpecs", match: { colors: regex } })
-        .exec();
+    const cdata = await InventoryModel.find({})
+    .populate({ path: "oemSpecs", match: { colors: { $in: regexColors } } })
+    .exec();
 
-      const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
-      return res.status(200).json({ data });
-    } else if (color && sort === "price" && order === "asc") {
+  const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
+  return res.status(200).json({ data });
+
+    } else if (color.length!==0 && sort === "price" && order === "asc") {
       // Filter by color and sort by price ascending
 
-      const regex = new RegExp(color, "i");
+      const regex = color.map((color) => new RegExp(color, "i"));
 
       const cdata = await InventoryModel.find({})
         .populate({
           path: "oemSpecs",
-          match: { colors: { $in: [regex] } },
+          match: { colors: { $in: regex } },
         })
         .sort({ "oemSpecs.new_model_price": 1 })
         .exec();
 
       const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
      return res.status(200).json({ data });
-    } else if (color && sort === "price" && order === "desc") {
+    } else if (color.length!==0 && sort === "price" && order === "desc") {
 
       // Filter by color and sort by price descending
 
-      const regex = new RegExp(color, "i");
+      const regex = color.map((color) => new RegExp(color, "i"));
 
       const cdata = await InventoryModel.find({})
         .populate({
           path: "oemSpecs",
-          match: { colors: { $in: [regex] } },
+          match: { colors: { $in: regex } },
         })
         .sort({ "oemSpecs.new_model_price": -1 })
         .exec();
 
       const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
       return res.status(200).json({ data });
-    }else if (color && sort === "mileage" && order === "asc") {
+    }else if (color.length!==0 && sort === "mileage" && order === "asc") {
       // Filter by color and sort by mileage ascending
     
-      const regex = new RegExp(color, "i");
+      const regex = color.map((color) => new RegExp(color, "i"));
     
       const cdata = await InventoryModel.find({})
         .populate({
           path: "oemSpecs",
-          match: { colors: regex },
+          match: { colors: { $in: regex} },
         })
         .sort({ "oemSpecs.mileage": 1 })
         .exec();
@@ -120,15 +121,15 @@ inventoryRouter.get("/cars", async (req, res) => {
       const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
       return res.status(200).json({ data });
     
-    } else if (color && sort === "mileage" && order === "desc") {
+    } else if (color.length!==0 && sort === "mileage" && order === "desc") {
       // Filter by color and sort by mileage descending
     
-      const regex = new RegExp(color, "i");
+      const regex = color.map((color) => new RegExp(color, "i"));
     
       const cdata = await InventoryModel.find({})
         .populate({
           path: "oemSpecs",
-          match: { colors: regex},
+          match: { colors: { $in: regex}},
         })
         .sort({ "oemSpecs.mileage": -1 })
         .exec();
