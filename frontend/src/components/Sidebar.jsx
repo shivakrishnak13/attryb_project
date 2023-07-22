@@ -168,7 +168,7 @@ const SidebarContainer = styled.div`
   flex-direction: column;
   margin-right: 10px;
   position: sticky;
-  margin-top: 70px;
+  margin-top: 90px;
 `;
 
 const SidebarTitle = styled.div`

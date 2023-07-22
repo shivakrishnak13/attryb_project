@@ -10,16 +10,46 @@ import {
 let url = "https://attryb-project-9szk.onrender.com";
 
 export const getCars = (params) => (dispatch) => {
-  console.log("params",params)
+  if (
+    params.color === null &&
+    params.price === null &&
+    params.mileage === null
+  ) {
+    params.price = "";
+    params.color = "";
+    params.mileage = "";
+  } else if (params.price === null && params.mileage === null) {
+    params.price = "";
+    params.mileage = "";
+  } else if (params.color === null && params.price === null) {
+    params.price = "";
+    params.color = "";
+  }else if (params.color === null && params.mileage === null){
+    params.color= "" ;
+    params.mileage="";
+  }else if(params.color === null){
+    params.color=""
+  }else if(params.price === null){
+    params.price="";
+  }else if(params.mileage === null){
+    params.mileage="";
+  }
+
+
+
+  console.log(params);
 
   dispatch({ type: CAR_REQUEST });
   axios
-    .get(`${url}/inventory/cars?price=${params.price}&color=${params.color}&mileage=${params.mileage}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
+    .get(
+      `${url}/inventory/cars?price=${params.price}&color=${params.color}&mileage=${params.mileage}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
     .then((res) => {
       dispatch({ type: GET_CAR_SUCCSESS, payload: res.data.data });
       console.log(res.data);

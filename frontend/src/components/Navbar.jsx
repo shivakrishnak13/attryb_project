@@ -5,33 +5,78 @@ import logo from "../assets/CarTrade.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { BiSolidUser } from "react-icons/bi";
 import { GrFormAdd } from "react-icons/gr";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { LOGOUT } from "../redux/AuthReducer/actionType";
 
 const Navbar = () => {
-    const nav = useNavigate();
+  const nav = useNavigate();
+  const { isdealerauth,isauth,username } = useSelector((store) => store.AuthReducer);
+  const isDealerAuth = useSelector((store) => !!store.AuthReducer.isdealerauth);
+  const isAuthenticated = useSelector((store) => !!store.AuthReducer.isauth);
+  const dispatch = useDispatch()
+  function navigateAddPage() {
+    if (isdealerauth) {
+      nav("/add-car");
+    } else {
+      toast.info("Unauthorized access Please login as Dealer!", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      nav("/login");
+    }
+  }
+
+  const handleLogout = () =>{
+    dispatch({type:LOGOUT})
+    toast.success("Logged out successfull", {
+      position: "top-center",
+      autoClose: 3000,
+    });
+    localStorage.removeItem('token');
+    nav("/")
+  }
+
   return (
-    <DIV>
+    <DIV >
       <div className="main-div">
-        <div className="img-div" onClick={()=> nav("/")}>
+        <div className="img-div" onClick={() => nav("/")}>
           <img src={logo} alt="logo" />
         </div>
 
         <div className="links">
           <Link to={"/"}>Home</Link>
-          <Link to={"/dealers"}>Cars</Link>
+          <Link to={"/users-car"}>Cars</Link>
           <Link>About</Link>
           <Link>Contact</Link>
+          {isdealerauth? <Link to="/dealers" >Dealers</Link>:""}
         </div>
-
-        <div className="btn-div">
-          <div className="login">
-            <BiSolidUser />
-            <a href="/login">Login</a>
-            <span>|</span>
-            <a href="/register">Register</a>
-          </div>
-          <button className="addBtn btn">
-            <GrFormAdd style={{color:"teal",width:"20px"}} />
-            <a href="/add-car">Add Car</a>
+        <div className="btn-div" style={{width: (isauth || isdealerauth)? "25%" : "20%"}}>
+          {isdealerauth && isauth  ? (
+            <div className="login" style={{width:"250px"}} >
+              <BiSolidUser />
+              <Link>Hello, Dealer</Link>
+              <button onClick={handleLogout}>Logout</button>
+            </div>
+          ) : isauth?
+          <div className="login" style={{width:"250px"}} >
+              <BiSolidUser />
+              <Link>Hello, {username}</Link>
+              <button onClick={handleLogout}>Logout</button>
+            </div>
+          
+          :
+           (
+            <div className="login">
+              <BiSolidUser />
+              <Link to="/login">Login</Link>
+              <span>|</span>
+              <Link to="/register">Register</Link>
+            </div>
+          )}
+          <button onClick={navigateAddPage} className="addBtn btn">
+            <GrFormAdd style={{ color: "teal", width: "20px" }} />
+            <Link>Add Car</Link>
           </button>
         </div>
       </div>
@@ -52,8 +97,8 @@ const DIV = styled.div`
   z-index: 12;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 
-  a{
-    text-decoration:none;
+  a {
+    text-decoration: none;
     color: black;
     font-weight: 300;
     letter-spacing: 0.5px;
@@ -88,7 +133,7 @@ const DIV = styled.div`
   }
 
   .btn-div {
-    width: 20%;
+    width:  20%;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -100,6 +145,17 @@ const DIV = styled.div`
     align-items: center;
     justify-content: space-around;
     width: 150px;
+    
+    button {
+      background-color: #2ecc71;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
   }
   .addBtn {
     display: flex;
@@ -109,7 +165,7 @@ const DIV = styled.div`
     padding: 10px;
     color: teal;
   }
-  .addbtn:hover{
+  .addbtn:hover {
     background-color: teal;
     color: white;
   }

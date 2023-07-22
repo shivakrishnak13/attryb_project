@@ -2,11 +2,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCars } from "../redux/ProductReducer/action";
 import { styled } from "styled-components";
-import CarCard from "./CarCard";
-import { Button, Heading } from "@chakra-ui/react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
-import {GrFormAdd} from "react-icons/gr"
-const Products = () => {
+
+import UserCarCard from "./UserCarCard";
+
+
+const UserProducts = () => {
   const [searchParams, _] = useSearchParams();
   const dispatch = useDispatch();
   const { cars, change } = useSelector((store) => store.CarsReducer);
@@ -33,23 +34,18 @@ const Products = () => {
   return (
     <DIV>
       <div className="haeading">
-        <h1></h1>
-        <h2>All Cars</h2>
-        <button>
-        <GrFormAdd style={{width:"30px",height:"30px"}} />
-          <Link to={"/add-car"}> Add New car</Link>
-        </button>
+        <h2>Find Perects Here</h2>
       </div>
       <div className="main">
         {cars.map((el) => {
-          return <CarCard key={el._id} {...el} />;
+          return <UserCarCard key={el._id} {...el} />;
         })}
       </div>
     </DIV>
   );
 };
 
-export default Products;
+export default UserProducts;
 
 const DIV = styled.div`
   margin-left: 20px;
@@ -60,13 +56,14 @@ const DIV = styled.div`
     gap: 20px;
   }
   .haeading {
-    display: flex;
-    justify-content: space-between;
+    
     h2 {
+      text-align: center;
       font-size: 45px;
       color: black;
       margin-left: 30px;
       font-weight: 700;
+      padding-right: 20px;
     }
     button {
       margin-left: 190px;

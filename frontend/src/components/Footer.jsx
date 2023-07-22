@@ -38,6 +38,7 @@ const DIV = styled.div`
   width: 100%;
   background-color: #222732;
   height: 400px;
+  margin-top: 50px;
 
   footer {
     padding-top: 100px;

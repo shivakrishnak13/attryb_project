@@ -105,6 +105,7 @@ const CarCard = ({
         <h3>{title}</h3>
         
         <p>{description}</p>
+        <h2>₹{price}</h2>
       </div>
 
       <div className="car-inventory">

@@ -1,15 +1,17 @@
-import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCSESS, SIGNUP_SUCCESS } from "./actionType";
+import { DEALER_AUTH, LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCSESS, LOGOUT, SIGNUP_SUCCESS } from "./actionType";
 
 const intialstate = {
-    isAuth:false,
+    isauth:false,
     token:"",
     isLoading:false,
     isError:false,
-    errorMessage:""
+    isdealerauth:false,
+    errorMessage:"",
+    username:""
 };
 
 
-export const reducer = (state= intialstate,{type,payload}) => {
+export const reducer = (state= intialstate,{type,payload,name}) => {
     switch (type) {
         case LOGIN_REQUEST:
             return {
@@ -20,10 +22,11 @@ export const reducer = (state= intialstate,{type,payload}) => {
         case LOGIN_SUCSESS:
             return{
                 ...state,
-                isAuth :true,
+                isauth :true,
                 token : payload,
                 isLoading : false,
-                isError : false
+                isError : false,
+                username: name
             }
         case LOGIN_FAILURE:
             return {
@@ -35,6 +38,22 @@ export const reducer = (state= intialstate,{type,payload}) => {
         case SIGNUP_SUCCESS:
             return {
                 ...state,
+                isLoading:false,
+                isError:false
+            }
+        case DEALER_AUTH:
+            return {
+                ...state,
+                isdealerauth:true,
+                isauth:true,
+                isLoading:false,
+                isError:false
+            }
+        case LOGOUT:
+            return {
+                ...state,
+                isdealerauth:false,
+                isauth:false,
                 isLoading:false,
                 isError:false
             }

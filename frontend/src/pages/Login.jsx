@@ -5,7 +5,7 @@ import { fetchLogin } from "../redux/AuthReducer/action";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import the CSS for toast styles
-import {AiOutlineEye,AiOutlineEyeInvisible} from "react-icons/ai"
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 const intialstate = {
   email: "",
   password: "",
@@ -13,72 +13,85 @@ const intialstate = {
 
 const Login = () => {
   const [show, setShow] = useState(false);
- 
+
   const [credentail, setcredentail] = useState(intialstate);
   const dispatch = useDispatch();
-  const { isLoading } = useSelector((store) => store.AuthReducer);
+  const { isLoading, isauth, isdealerauth,username } = useSelector(
+    (store) => store.AuthReducer
+  );
   const navigate = useNavigate();
-
+  console.log("isAuth", isauth);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setcredentail({ ...credentail, [name]: value });
   };
 
   const handleLogin = () => {
-    dispatch(fetchLogin(credentail)).then(() => {
-      toast.success("Logged in successfully", {
+    dispatch(fetchLogin(credentail)).then(()=>{
+      if (isauth && isdealerauth) {
+        toast.success("Successfully Logged in as DEALER", {
+          position: "top-center",
+          autoClose: 6000,
+        });
+  
+        navigate("/");
+      } else if (isauth) {
+        toast.success(`Successfully Logged in ${username}…`, {
+          position: "top-center",
+          autoClose: 6000,
+        });
+  
+        navigate("/");
+      }
+      navigate("/")
+    }).catch(()=>{
+   
+      toast.error("Email or Password are incorrect", {
         position: "top-center",
         autoClose: 3000,
       });
-      navigate("/dealers");
+       
     })
-    .catch((error) => {
-      toast.error("Failed to login", {
-        position: "top-center",
-        autoClose: 3000,
-      });
-      
-    });
+    
+    
   };
 
-  const handleClick = ()=>{
-    console.log("hai")
-  }
+  const handleClick = () => {
+    console.log("hai");
+  };
 
   return (
     <DIV>
-    <h2>Please Login</h2>
-    <div className="loginform">
-      <div className="input-group">
-        <input
-          placeholder="Enter your Email"
-          type="email"
-          name="email"
-          onChange={handleChange}
-        />
-      </div>
-      <div className="input-group">
-        <input
-          type={show ? "text" : "password"}
-          placeholder="Enter password"
-          name="password"
-          onChange={handleChange}
-        />
-        <div className="input-right-element">
-          {/* <button onClick={handleClick}>
-            {show ? "Hide" : "Show"}
-          </button> */}
-          {
-            (show)? <div  onClick={handleClick}><AiOutlineEyeInvisible onClick={()=> console.log("hello")} className="icon"/> </div>  : <AiOutlineEye className="icon" onClick={()=> setShow(false)}/>
-          }
+      <h2>Please Login</h2>
+      <div className="loginform">
+        <div className="input-group">
+          <input
+            placeholder="Enter your Email"
+            type="email"
+            name="email"
+            onChange={handleChange}
+          />
         </div>
+        <div className="input-group">
+          <input
+            type={show ? "text" : "password"}
+            placeholder="Enter password"
+            name="password"
+            onChange={handleChange}
+          />
+          <div className="input-right-element">
+            <button onClick={handleClick}>{show ? "Hide" : "Show"}</button>
+            {/* {
+            (show)? <div  onClick={handleClick}><AiOutlineEyeInvisible onClick={()=> console.log("hello")} className="icon"/> </div>  : <AiOutlineEye className="icon" onClick={()=> setShow(false)}/>
+          } */}
+          </div>
+        </div>
+        <button className="button" onClick={handleLogin} disabled={isLoading}>
+          {isLoading ? "Loading..." : "Login"}
+        </button>
       </div>
-      <button className="button" onClick={handleLogin}>
-        {isLoading ? "Loading..." : "Login"}
-      </button>
-    </div>
-    <ToastContainer />
-  </DIV>
+      <ToastContainer />
+    </DIV>
   );
 };
 
@@ -145,7 +158,7 @@ const DIV = styled.div`
   .button:hover {
     background-color: #27ae60;
   }
-  .icon{
+  .icon {
     width: 25px;
     height: 25px;
     padding-right: 5px;

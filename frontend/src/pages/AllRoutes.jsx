@@ -6,6 +6,7 @@ import DealersPage from './DealersPage'
 import UsersPage from './UsersPage'
 import Register from './Register'
 import AddCar from './AddCar'
+import PrivateRoutes from '../components/PrivateRoutes'
 
 const AllRoutes = () => {
 
@@ -13,8 +14,12 @@ const AllRoutes = () => {
     <Routes>
         <Route path='/' element={<HomePage/>} />
         <Route path='/login' element={<Login/>} />
-        <Route path='/dealers' element={<DealersPage/>} />
-        <Route path='/users' element={<UsersPage/>} />
+        <Route path='/dealers' element={
+        <PrivateRoutes>
+        <DealersPage/>
+        </PrivateRoutes>
+        } />
+        <Route path='/users-car' element={<UsersPage/>} />
         <Route path='/register' element={<Register/>} />
         <Route path='/add-car' element={<AddCar/>} />
     </Routes>

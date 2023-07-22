@@ -5,18 +5,101 @@ import { useTypewriter,Cursor } from 'react-simple-typewriter';
 import { useSelector } from 'react-redux';
 import HCarCard from '../components/HCarCard';
 import Footer from '../components/Footer';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const HomePage = () => {
-
+  const navigate = useNavigate();
+  const {isauth} = useSelector((store)=> store.AuthReducer)
   const [text] = useTypewriter({
     words: ['Find Great Cars', 'Explore Quality Used Cars at Unbeatable Prices',"Discover Reliable Pre-Owned Vehicles Today"," Wide Selection of Pre-Loved Cars Awaits!"],
     loop: {},
     typeSpeed: 120,
     deleteSpeed: 80,
   });
+  
 
+  const carListings = [
+    {
+      accidentsReported: 0,
+      createdAt: "2023-07-19T03:59:30.145Z",
+      description: "This Honda Accord LX is a reliable sedan with excellent fuel efficiency.",
+      image: "https://fastly-production.24c.in/hello-ar/dev/uploads/4d347f85-f897-4a30-b4cf-f50b8106a1d8/f08c39a6-3002-4c64-ae3a-d2e1debf04c7/44.jpg?w=690&auto=format",
+      kmOnOdometer: 41000,
+      majorScratches: "None",
+      
+      originalPaint: "Yes",
+      previousBuyers: 1,
+      price: 300000,
+      registrationPlace: "Karnataka",
+      title: "2020 Honda Accord",
+      updatedAt: "2023-07-22T07:00:54.676Z",
+      _id: "64b75fa2f9c84e61866877d1"
+    },
+    {
+      accidentsReported: 1,
+      createdAt: "2023-07-19T16:47:51.087Z",
+      description: "Good Condition",
+      image: "https://fastly-production.24c.in/hello-ar/dev/uploads/64b52425bdf72cb9a4c96605/a9c74c97-0813-40dc-9ac8-12fa68f324b1/slot/14412117747-c92ec0b13cdb494c949806f594d5de6a-Exterior-8.jpg?w=690&auto=format",
+      kmOnOdometer: 36000,
+      majorScratches: "2",
+     
+      originalPaint: "Yes",
+      previousBuyers: 0,
+      price: 320000,
+      registrationPlace: "Delhi",
+      title: "Honda Activa 5G",
+      updatedAt: "2023-07-22T06:40:33.603Z",
+      _id: "64b813b60b331b615558b856"
+    },
+    {
+      accidentsReported: 1,
+      createdAt: "2023-07-19T16:47:51.087Z",
+      description: "Good Condition",
+      image: "https://images10.gaadi.com/usedcar_image/3510693/original/usedcar_1_729861689933021_1689933031.jpg?imwidth=640",
+      kmOnOdometer: 32000,
+      majorScratches: "0",
+     
+      originalPaint: "Yes",
+      previousBuyers: 0,
+      price: 200000,
+      registrationPlace: "Hyderbad",
+      title: "2014 Maruti Wagon R LXI CNG",
+      updatedAt: "2023-07-21T13:30:16.175Z",
+      _id: "64baa1b22fd71ad44aaa63d8"
+    },
+    {
+      accidentsReported: 1,
+      createdAt: "2023-07-19T16:47:51.087Z",
+      description: "Good Condition",
+      image: "https://fastly-production.24c.in/hello-ar/dev/uploads/23149658-60e5-494d-8c8b-d625e02f4676/a8cfcfd6-b14e-428f-8bc5-b1a4a8c1ef94/42.jpg?w=690&auto=format",
+      kmOnOdometer: 32000,
+      majorScratches: "0",
+  
+      originalPaint: "Yes",
+      previousBuyers: 0,
+      price: 220000,
+      registrationPlace: "Hyderbad",
+      title: "2013 Hyundai i10",
+      updatedAt: "2023-07-21T13:30:16.175Z",
+      _id: "6d8"
+    }
+  ];
+  
 
-  const {cars} = useSelector((store)=> store.CarsReducer)
+  const handleNavigate = ()=>{
+      if(isauth){
+        navigate("/users-car")
+      }else{
+        toast.info(
+          'Please login to view your car details',{
+            position:"top-center",
+            autoClose: 4000,
+          })
+        navigate("/login")
+      }
+  }
+  
 
   return (
     <DIV>
@@ -30,11 +113,11 @@ const HomePage = () => {
     <div className="cars-div">
       <h1>Popular Makes</h1>
       <div className="car-cards">
-         {cars?.map((el)=>{
-          return <HCarCard key={el.id} {...el}/>
+         {carListings?.map((el)=>{
+          return <HCarCard key={el._id} {...el}/>
          })}
       </div>
-      <button>More...</button>
+      <button onClick={handleNavigate}>More...</button>
     </div>
 
 
@@ -82,7 +165,7 @@ const DIV = styled.div`
     h1{
       text-align: start;
       padding-top: 20px;
-      margin-left: 20px;
+      margin-left:70px;
       font-weight: 700;
     }
   }
@@ -91,11 +174,10 @@ const DIV = styled.div`
     display: flex;
     margin: auto;
     justify-content: space-between;
-    align-items: center;
-    margin-left: 20px;
+    align-items: center; 
+    width: 90%;
+    margin:auto;
     margin-top: 50px;
-    width: 80%;
-
   }
   button{
     width: 150px;

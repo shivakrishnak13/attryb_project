@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { fetchregister } from "../redux/AuthReducer/action";
@@ -17,7 +17,7 @@ const Register = () => {
   const [password, setPassord] = useState("");
   const [cpassword, setCPassword] = useState("");
   const navigate = useNavigate();
-
+  const {isLoading} = useSelector((store)=> store.AuthReducer)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDetails({ ...details, [name]: value });
@@ -81,8 +81,8 @@ const Register = () => {
             }}
           />
         </div>
-        <button className="register-button" onClick={handleLogin}>
-          Register
+        <button className="register-button" onClick={handleLogin} disabled={isLoading} >
+          {isLoading? "Creating Account...":"Register"}
         </button>
       </div>
     </DIV>
