@@ -156,11 +156,11 @@ inventoryRouter.get("/cars", async (req, res) => {
       return res.status(200).json({ data });
     } else if (price === "asc") {
       // sort by price ascending
-      let data = await InventoryModel.find({}).sort({ price: 1 });
+      let data = await InventoryModel.find({}).populate({ path: "oemSpecs" }).sort({ price: 1 }).exec();
       return res.status(200).json({ data });
     } else if (price === "desc") {
       // sort by price descending
-      let data = await InventoryModel.find({}).sort({ price: -1 });
+      let data = await InventoryModel.find({}).populate({ path: "oemSpecs" }).sort({ price: -1 }).exec();
       return res.status(200).json({ data });
     }
     if (mileage === "asc") {
