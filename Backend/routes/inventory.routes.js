@@ -62,7 +62,7 @@ inventoryRouter.get("/cars", async (req, res) => {
     }
     
     
-    else if (color.length!==0) {
+    else if (color) {
       //filter by color
 
       const regexColors = color?.map((color) => new RegExp(color, "i"));
@@ -74,7 +74,7 @@ inventoryRouter.get("/cars", async (req, res) => {
   const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
   return res.status(200).json({ data });
 
-    } else if (color.length!==0 && sort === "price" && order === "asc") {
+    } else if (color && sort === "price" && order === "asc") {
       // Filter by color and sort by price ascending
 
       const regex = color?.map((color) => new RegExp(color, "i"));
@@ -89,7 +89,7 @@ inventoryRouter.get("/cars", async (req, res) => {
 
       const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
      return res.status(200).json({ data });
-    } else if (color.length!==0 && sort === "price" && order === "desc") {
+    } else if (color && sort === "price" && order === "desc") {
 
       // Filter by color and sort by price descending
 
@@ -105,7 +105,7 @@ inventoryRouter.get("/cars", async (req, res) => {
 
       const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
       return res.status(200).json({ data });
-    }else if (color.length!==0 && sort === "mileage" && order === "asc") {
+    }else if (color && sort === "mileage" && order === "asc") {
       // Filter by color and sort by mileage ascending
     
       const regex = color?.map((color) => new RegExp(color, "i"));
@@ -121,7 +121,7 @@ inventoryRouter.get("/cars", async (req, res) => {
       const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
       return res.status(200).json({ data });
     
-    } else if (color.length!==0 && sort === "mileage" && order === "desc") {
+    } else if (color && sort === "mileage" && order === "desc") {
       // Filter by color and sort by mileage descending
     
       const regex = color?.map((color) => new RegExp(color, "i"));
