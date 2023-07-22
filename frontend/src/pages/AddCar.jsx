@@ -16,6 +16,7 @@ const initialState = {
   registrationPlace: "",
   originalPaint: "",
   oemSpecs: "",
+  price:""
 };
 
 const AddCar = () => {
@@ -28,7 +29,7 @@ const AddCar = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCar({ ...car, [name]: value });
+    setCar({ ...car, [name]: (name === "price" || name === "kmOnOdometer" || name === "accidentsReported" || name === "previousBuyers" ) ? +value : value });
   };
 
   useEffect(() => {
@@ -61,7 +62,8 @@ const AddCar = () => {
       car.originalPaint !== "" &&
       car.majorScratches !== "" &&
       car.previousBuyers !== "" &&
-      car.registrationPlace !== ""
+      car.registrationPlace !== "" &&
+      car.price !== ""
     ) {
       dispatch(addCar(car)).then((res) => {
         toast.success("Car Details Added Successfull!", {
@@ -132,6 +134,13 @@ const AddCar = () => {
           onChange={handleChange}
           value={car.description}
           name="description"
+        />
+        <label>Price</label>
+        <textarea
+          placeholder="Price"
+          onChange={handleChange}
+          value={car.price}
+          name="price"
         />
 
         <label>Image</label>

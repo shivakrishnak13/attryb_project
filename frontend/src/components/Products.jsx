@@ -11,18 +11,19 @@ const Products = () => {
   const dispatch = useDispatch();
   const { cars, change } = useSelector((store) => store.CarsReducer);
 
-  const colors = searchParams.getAll("colors");
-  const sort = searchParams.get("sort");
-  const order = searchParams.get("order");
+  const color = searchParams.get("colors");
+  const price = searchParams.get("price");
+  const mileage = searchParams.get("mileage");
   const location = useLocation();
 
   let ParamObj = {
-    params: {
-      color: colors,
-      sort: sort,
-      order: order,
-    },
+   
+      color,
+      price,
+      mileage
+    
   };
+  
 
   useEffect(() => {
     dispatch(getCars(ParamObj));

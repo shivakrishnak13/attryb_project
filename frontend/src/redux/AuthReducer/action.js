@@ -7,10 +7,11 @@ export const fetchLogin = (payload) => (dispatch) => {
     dispatch({type:LOGIN_REQUEST})
     return axios.post(`${url}/user/login`,payload).then((res)=>{
         dispatch({type:LOGIN_SUCSESS,payload:res.data.token});
+
         localStorage.setItem("token",res.data.token);
-        console.log(res.data)
+        console.log("hair",res.data)
     }).catch((err)=>{ 
-        console.log(err.response.data.Error)
+        console.log("login",err.response.data.Error)
         dispatch({type:LOGIN_FAILURE,payload:err.response.data.Error})
     })
 };

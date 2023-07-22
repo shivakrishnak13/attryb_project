@@ -5,6 +5,7 @@ import { deleteCar, editCar } from "../redux/ProductReducer/action";
 import Modal from "react-modal";
 import { BsX } from "react-icons/bs";
 import { AiFillCheckCircle } from "react-icons/ai";
+import { toast } from "react-toastify";
 Modal.setAppElement('#root');
 
 
@@ -54,6 +55,17 @@ const CarCard = ({
     price
   };
 
+
+  const [editmodalIsOpen, setEditModalIsOpen] = useState(false);
+
+  const openEditModal = () => {
+    setEditModalIsOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalIsOpen(false);
+  };
+
   const [car, setCarDetails] = useState(intialstate);
 
   // const toast = useToast()
@@ -64,26 +76,25 @@ const CarCard = ({
 
   const handleUpdate = () => {
     dispatch(editCar(car, _id)).then(() => {
-     
+      toast.success("Car Details Updated successfully", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      closeEditModal();
     });
   };
 
   const handleDelete = () => {
     dispatch(deleteCar(_id)).then(() => {
-      
+      toast.success("Car Details Deleted successfully", {
+        position: "top-center",
+        autoClose: 3000,
+      });
     });
   };
 
   
-  const [editmodalIsOpen, setEditModalIsOpen] = useState(false);
-
-  const openEditModal = () => {
-    setEditModalIsOpen(true);
-  };
-
-  const closeEditModal = () => {
-    setEditModalIsOpen(false);
-  };
+  
 
   
   
@@ -125,7 +136,7 @@ const CarCard = ({
 
       <div className="btns">
         <button className="editbtn" onClick={openEditModal} >Edit</button>
-        <button className="deletebtn" >Delete</button>
+        <button className="deletebtn" onClick={handleDelete} >Delete</button>
       </div>
 
 
@@ -237,7 +248,9 @@ const CarCard = ({
           </select>
         </Form>
         <StyledBTN>
-          <button >Save</button>
+          <button onClick={handleUpdate} >
+            {isLoading ? "Saving..." : "Save"}
+          </button>
           <button onClick={closeEditModal}>Cancel</button>
         </StyledBTN>
       </ModalContent>

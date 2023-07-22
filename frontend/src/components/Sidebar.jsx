@@ -6,46 +6,41 @@ const Sidebar = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const initialColors = searchParams.getAll("colors");
-  const initialSort = searchParams.get("sort");
-  const initialOrder = searchParams.get("order");
+  const initialPrice = searchParams.get("price");
+  const initialMileage = searchParams.get("mileage");
 
-  const [colors, setColors] = useState(initialColors || []);
-  const [sort, setSort] = useState(initialSort || "");
-  const [order, setOrder] = useState(initialOrder || "");
+  const [colors, setColors] = useState(initialColors || "");
+  const [price, setPrice] = useState(initialPrice || "");
+  const [mileage, setMileage] = useState(initialMileage || "");
   const [clear, setClear] = useState(false);
+  // Update URL parameters on change of filters or reset button click
   useEffect(() => {
     let params = {
       colors,
     };
-    sort && (params.sort = sort);
-    order && (params.order = order);
+    price && (params.price = price);
+    mileage && (params.mileage = mileage);
     setSearchParams(params);
-  }, [colors, sort, order, clear]);
+  }, [colors, price, mileage, clear]);
 
   const handleColors = (e) => {
-    const { name, value } = e.target;
-    let newColors = [...colors];
-    if (newColors.includes(value)) {
-      newColors = newColors.filter((el) => el !== value);
-    } else {
-      newColors.push(value);
-    }
-    setColors(newColors);
+    setColors(e.target.value);
   };
 
-  const handleSort = (e, val) => {
-    setOrder(e);
-    setSort(val);
-    console.log(e, val);
+  const handlePriceSort = (e) => {
+    setPrice(e.target.value)
+  };
+  const handleMileageSort = (e) => {
+    setMileage(e.target.value)
   };
 
   const handleReset = () => {
-    setColors([]);
-    setSort("");
-    setOrder("");
+    setColors("");
+    setPrice("");
+    setMileage("");
 
     const params = {
-      colors: [],
+      colors: "",
       sort: "",
       order: "",
     };
@@ -60,50 +55,64 @@ const Sidebar = () => {
       <ColorFilterContainer>
         <ColorCheckbox>
           <input
-            type="checkbox"
+            type="radio"
             value="red"
+            name="color"
             onChange={handleColors}
-            defaultChecked={colors.includes("red")}
+            defaultChecked={colors === "red"}
           />
           <label>Red</label>
         </ColorCheckbox>
         <ColorCheckbox>
           <input
-            type="checkbox"
+            type="radio"
             value="blue"
+            name="color"
             onChange={handleColors}
-            defaultChecked={colors.includes("blue")}
+            defaultChecked={colors === "blue"}
           />
           <label>Blue</label>
         </ColorCheckbox>
         <ColorCheckbox>
           <input
-            type="checkbox"
+            type="radio"
             value="white"
+            name="color"
             onChange={handleColors}
-            defaultChecked={colors.includes("white")}
+            defaultChecked={colors === "white"}
           />
           <label>White</label>
         </ColorCheckbox>
         <ColorCheckbox>
           <input
-            type="checkbox"
+            type="radio"
             value="green"
+            name="color"
             onChange={handleColors}
-            defaultChecked={colors.includes("green")}
+            defaultChecked={colors === "green"}
           />
           <label>Green</label>
+        </ColorCheckbox>
+        <ColorCheckbox>
+          <input
+            type="radio"
+            name="color"
+            value="black"
+            onChange={handleColors}
+            defaultChecked={colors === "black"}
+          />
+          <label>Black</label>
         </ColorCheckbox>
       </ColorFilterContainer>
 
       <SidebarTitle>Sort By Price</SidebarTitle>
       <PriceSortContainer>
-        <SortRadioGroup onChange={(e) => handleSort(e, "price")}>
+        <SortRadioGroup onChange={handlePriceSort}>
           <label>
             <input
               type="radio"
               value="asc"
-              defaultChecked={order === "asc"}
+              defaultChecked={price === "asc"}
               name="priceSort"
             />
             Ascending
@@ -112,7 +121,7 @@ const Sidebar = () => {
             <input
               type="radio"
               value="desc"
-              defaultChecked={order === "desc"}
+              defaultChecked={price === "desc"}
               name="priceSort"
             />
             Descending
@@ -122,12 +131,12 @@ const Sidebar = () => {
 
       <SidebarTitle>Sort By Milage</SidebarTitle>
       <MileageSortContainer>
-        <SortRadioGroup onChange={(e) => handleSort(e, "mileage")}>
+        <SortRadioGroup onChange={handleMileageSort}>
           <label>
             <input
               type="radio"
               value="asc"
-              defaultChecked={order === "asc"}
+              defaultChecked={mileage === "asc"}
               name="mileageSort"
             />
             Ascending
@@ -136,7 +145,7 @@ const Sidebar = () => {
             <input
               type="radio"
               value="desc"
-              defaultChecked={order === "desc"}
+              defaultChecked={mileage === "desc"}
               name="mileageSort"
             />
             Descending
