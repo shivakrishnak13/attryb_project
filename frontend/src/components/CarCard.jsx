@@ -5,6 +5,26 @@ import { deleteCar, editCar } from "../redux/ProductReducer/action";
 import Modal from "react-modal";
 import { BsX } from "react-icons/bs";
 import { AiFillCheckCircle } from "react-icons/ai";
+Modal.setAppElement('#root');
+
+
+
+
+
+const modalStyles = {
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  content: {
+    width: '600px',
+    height:"800px",
+    top: '55%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    transition: 'transform 0.3s ease',
+  },
+};
+
 
 const CarCard = ({
   _id,
@@ -17,6 +37,7 @@ const CarCard = ({
   previousBuyers,
   registrationPlace,
   originalPaint,
+  price
 }) => {
   const { isLoading } = useSelector((store) => store.CarsReducer);
   const dispatch = useDispatch();
@@ -30,11 +51,11 @@ const CarCard = ({
     previousBuyers,
     registrationPlace,
     originalPaint,
+    price
   };
 
   const [car, setCarDetails] = useState(intialstate);
-  const [isEditOpen, setIsEditOpen] = useState(false);
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
   // const toast = useToast()
 
   const handleChange = (event) => {
@@ -43,23 +64,35 @@ const CarCard = ({
 
   const handleUpdate = () => {
     dispatch(editCar(car, _id)).then(() => {
-      setIsEditOpen(false);
      
     });
   };
 
   const handleDelete = () => {
     dispatch(deleteCar(_id)).then(() => {
-      setIsDeleteOpen(false);
       
     });
   };
 
+  
+  const [editmodalIsOpen, setEditModalIsOpen] = useState(false);
+
+  const openEditModal = () => {
+    setEditModalIsOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalIsOpen(false);
+  };
+
+  
+  
   return (
-    <CarCardContainer>
-      <CarImage src={image} alt="img" />
+    <DIV>
+      <img className="carImage" src={image} alt="img" />
       <div className="title">
         <h3>{title}</h3>
+        
         <p>{description}</p>
       </div>
 
@@ -89,108 +122,139 @@ const CarCard = ({
           <p>{originalPaint}</p>
         </div>
       </div>
-{/* 
+
       <div className="btns">
-        <Button backgroundColor={"purple"} onClick={() => setIsEditOpen(true)}>
-          Edit
-        </Button>
-        <Button backgroundColor={"red"} onClick={() => setIsDeleteOpen(true)}>
-          Delete
-        </Button>
-      </div> */}
+        <button className="editbtn" onClick={openEditModal} >Edit</button>
+        <button className="deletebtn" >Delete</button>
+      </div>
+
 
       {/* Edit Modal */}
-      {/* <StyledModal
-        isOpen={isEditOpen}
-        onRequestClose={() => setIsEditOpen(false)}
-      >
-        <ModalHeader>Edit Car Details</ModalHeader>
-        <ModalCloseButton onClick={() => setIsEditOpen(false)} />
-        <ModalBody>
-          <FormControl>
-            <FormLabel>Title</FormLabel>
-            <Input
-              placeholder="title"
-              onChange={handleChange}
-              value={car.title}
-              name="title"
-            />
-          </FormControl>
 
-          <FormControl mt={4}>
-            <FormLabel>Description</FormLabel>
-            <Textarea
-              placeholder="Description"
-              onChange={handleChange}
-              value={car.description}
-              name="description"
-            />
-          </FormControl> */}
+      <Modal
+      isOpen={editmodalIsOpen}
+      onRequestClose={closeEditModal}
+      contentLabel="Edit Modal"
+      style={modalStyles}
+    >
+        
+          <ModalContent>
+        <CloseButton onClick={closeEditModal}>
+          <BsX size={24} />
+        </CloseButton>
+        <h4 style={{marginTop:'8%'}}><b>EDIT CAR DETAILS
+          </b></h4>
+        <Form>
+          <label>Title</label>
+          <input
+            type="text"
+            placeholder="Title"
+            onChange={handleChange}
+            value={car.title}
+            name="title"
+          />
 
-          {/* Rest of the form controls */}
-          {/* ... */}
-        {/* </ModalBody>
+          <label>Description</label>
+          <textarea
+            placeholder="Description"
+            onChange={handleChange}
+            value={car.description}
+            name="description"
+          />
 
-        <ModalFooter>
-          <Button
-            backgroundColor={"blue"}
-            mr={3}
-            onClick={handleUpdate}
-            disabled={isLoading}
+          <label>Image</label>
+          <input
+            type="text"
+            placeholder="Image URL"
+            onChange={handleChange}
+            value={car.image}
+            name="image"
+          />
+
+          <label>Km On Odometer</label>
+          <input
+            type="text"
+            placeholder="Km On Odometer"
+            onChange={handleChange}
+            value={car.kmOnOdometer}
+            name="kmOnOdometer"
+          />
+
+          <label>Major Scratches</label>
+          <input
+            type="text"
+            placeholder="Major Scratches"
+            onChange={handleChange}
+            value={car.majorScratches}
+            name="majorScratches"
+          />
+
+          <label>Accidents Reported</label>
+          <input
+            type="text"
+            placeholder="Accidents Reported"
+            onChange={handleChange}
+            value={car.accidentsReported}
+            name="accidentsReported"
+          />
+
+          <label>Previous Buyers</label>
+          <input
+            type="text"
+            placeholder="Previous Buyers"
+            onChange={handleChange}
+            value={car.previousBuyers}
+            name="previousBuyers"
+          />
+
+
+          <label>Price</label>
+          <input
+            type="number"
+            placeholder="Price"
+            onChange={handleChange}
+            value={car.price}
+            name="price"
+          />
+
+          <label>Registration Place</label>
+          <input
+            type="text"
+            placeholder="Registration Place"
+            onChange={handleChange}
+            value={car.registrationPlace}
+            name="registrationPlace"
+          />
+
+          <label>Original Paint</label>
+          <select
+            onChange={handleChange}
+            value={car.originalPaint}
+            name="originalPaint"
           >
-            {isLoading ? (
-              <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="md" />
-            ) : (
-              "Submit"
-            )}
-          </Button>
-          <Button onClick={() => setIsEditOpen(false)}>Cancel</Button>
-        </ModalFooter>
-      </StyledModal> */}
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </Form>
+        <StyledBTN>
+          <button >Save</button>
+          <button onClick={closeEditModal}>Cancel</button>
+        </StyledBTN>
+      </ModalContent>
+    </Modal>
+      
+    
 
-      {/* Delete Modal */}
-      {/* <AlertDialog
-        isOpen={isDeleteOpen}
-        leastDestructiveRef={cancelRef}
-        onClose={() => setIsDeleteOpen(false)}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Car
-            </AlertDialogHeader>
 
-            <AlertDialogBody>
-              Are you sure? You can't undo this action afterwards.
-            </AlertDialogBody>
 
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={() => setIsDeleteOpen(false)}>
-                Cancel
-              </Button>
-              <Button
-                backgroundColor={"red"}
-                onClick={handleDelete}
-                ml={3}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="md" />
-                ) : (
-                  "Delete"
-                )}
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog> */}
-    </CarCardContainer>
+
+    </DIV>
   );
 };
 
 export default CarCard;
 
-const CarCardContainer = styled.div`
+const DIV = styled.div`
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   border-radius: 1rem;
@@ -209,6 +273,7 @@ const CarCardContainer = styled.div`
       margin-top: 8px;
       font-size: 13px;
       text-align: start;
+      height: 40px;
     }
   }
 
@@ -220,7 +285,7 @@ const CarCardContainer = styled.div`
     gap: 5px;
 
     div {
-      background-color: #fafa;
+      background-color: #eceff1;
       border-radius: 0.7rem;
       box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
       padding: 5px;
@@ -244,83 +309,127 @@ const CarCardContainer = styled.div`
     align-items: center;
     margin-bottom: 20px;
   }
-`;
-
-const StyledModal = styled(Modal)`
-  .ModalContent {
-    width: 400px;
-    margin: auto;
-    border-radius: 0.6rem;
-    background-color: white;
-    padding: 15px;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
-      rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  .carImage {
+    border-top-left-radius: 0.8rem;
+    border-top-right-radius: 0.8rem;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
   }
 
-  .ModalHeader {
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 10px;
-  }
-
-  .ModalCloseButton {
+  .editbtn{
+    background-color: #4DB6AC;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
     cursor: pointer;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    color: #b5b5b5;
-    font-size: 18px;
+    transition: background-color 0.3s ease;
   }
 
-  .ModalBody {
-    padding: 0 10px;
-
-    label {
-      font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    input,
-    textarea,
-    select {
-      width: 100%;
-      padding: 8px;
-      font-size: 14px;
-      border: 1px solid #b5b5b5;
-      border-radius: 4px;
-      margin-bottom: 10px;
-    }
+  .editbtn:hover{
+    background-color:#3e9b91 ;
   }
 
-  .ModalFooter {
+  .deletebtn{
+    background-color: #F4511E;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .deletebtn:hover{
+    background-color:#d73a2f
+  }
+
+
+  .modal{
+     border: 1px solid red;
+  }
+
+`;
+
+const ModalContent = styled.div`
+  position: relative;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+
+  h4 {
     text-align: center;
-    margin-top: 20px;
-
-    button {
-      padding: 10px 20px;
-      font-size: 14px;
-      border-radius: 4px;
-      cursor: pointer;
-      color: white;
-      transition: background-color 0.2s ease-in-out;
-
-      &:hover {
-        background-color: #2d66da;
-      }
-
-      &:not(:first-child) {
-        margin-left: 10px;
-      }
-    }
+    margin-top: 10px;
   }
 `;
 
-const CarImage = styled.img`
-  border-top-left-radius: 0.8rem;
-  border-top-right-radius: 0.8rem;
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+`;
+
+const Form = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  label {
+    font-weight: bold;
+  }
+
+  input,
+  textarea,
+  select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  select {
+    width: 100%;
+  }
+`;
+
+
+const StyledBTN = styled.div`
+  margin: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  button{
+   
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+ button:nth-child(1){
+  background-color: #2ecc71;
+ }
+ button:nth-child(1):hover{
+  background-color: #15d665;
+ }
+
+ button:nth-child(2){
+  background-color: #db5e20;
+ }
+ button:nth-child(2):hover{
+  background-color: #e3723a;
+ }
+
 `;

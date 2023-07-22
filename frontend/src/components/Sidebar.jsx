@@ -1,149 +1,227 @@
-import {
-  Button,
-  Checkbox,
-  Radio,
-  RadioGroup,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { styled } from "styled-components";
 
 const Sidebar = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const initialColors = searchParams.getAll("colors");
+  const initialSort = searchParams.get("sort");
+  const initialOrder = searchParams.get("order");
 
+  const [colors, setColors] = useState(initialColors || []);
+  const [sort, setSort] = useState(initialSort || "");
+  const [order, setOrder] = useState(initialOrder || "");
+  const [clear, setClear] = useState(false);
+  useEffect(() => {
+    let params = {
+      colors,
+    };
+    sort && (params.sort = sort);
+    order && (params.order = order);
+    setSearchParams(params);
+  }, [colors, sort, order, clear]);
 
-
-    const [searchparams,setSearchParams] = useSearchParams();
-
-    const intialColors = searchparams.getAll("colors");
-    const intialsort = searchparams.get("sort");
-    const intialOrder = searchparams.get("order");
-
-    const [colors,setColors] = useState(intialColors || []);
-    const [sort,setsort] = useState(intialsort|| "");
-    const [order, setorder]=useState(intialOrder || "");
-
-    useEffect(() => {
-        let params = {
-            colors,
-           
-        }
-        sort && (params.sort= sort)
-        order && (params.order= order);
-        setSearchParams(params)
-    },[colors,sort,order])
-
-    const handleColors = (e) =>{
-        const {name,value} = e.target;
-        let newColors = [...colors];
-        if(newColors.includes(value)){
-            newColors = newColors.filter((el)=> el !== value);
-        }else{
-            newColors.push(value);
-        }
-        setColors(newColors)
+  const handleColors = (e) => {
+    const { name, value } = e.target;
+    let newColors = [...colors];
+    if (newColors.includes(value)) {
+      newColors = newColors.filter((el) => el !== value);
+    } else {
+      newColors.push(value);
     }
+    setColors(newColors);
+  };
 
-    const handleSort = (e,val) =>{
-        setorder(e);
-        setsort(val)
-        console.log(e,val)
-    }
+  const handleSort = (e, val) => {
+    setOrder(e);
+    setSort(val);
+    console.log(e, val);
+  };
+
+  const handleReset = () => {
+    setColors([]);
+    setSort("");
+    setOrder("");
+
+    const params = {
+      colors: [],
+      sort: "",
+      order: "",
+    };
+
+    setSearchParams(params);
+    setClear(!clear);
+  };
 
   return (
-    <DIV>
-      <Text fontWeight={"bold"} fontSize={"20px"}>
-        Filter By Color
-      </Text>
-      <div className="colorsfilter">
-        <div className="checkbox">
-          <Checkbox value={"red"} onChange={handleColors} defaultChecked={colors.includes("red")}/>
+    <SidebarContainer>
+      <SidebarTitle>Filter By Color</SidebarTitle>
+      <ColorFilterContainer>
+        <ColorCheckbox>
+          <input
+            type="checkbox"
+            value="red"
+            onChange={handleColors}
+            defaultChecked={colors.includes("red")}
+          />
           <label>Red</label>
-        </div>
-        <div className="checkbox">
-          <Checkbox value={"white"} onChange={handleColors} defaultChecked={colors.includes("white")}/>
+        </ColorCheckbox>
+        <ColorCheckbox>
+          <input
+            type="checkbox"
+            value="blue"
+            onChange={handleColors}
+            defaultChecked={colors.includes("blue")}
+          />
+          <label>Blue</label>
+        </ColorCheckbox>
+        <ColorCheckbox>
+          <input
+            type="checkbox"
+            value="white"
+            onChange={handleColors}
+            defaultChecked={colors.includes("white")}
+          />
           <label>White</label>
-        </div>
-        <div className="checkbox">
-          <Checkbox value={"yellow"} onChange={handleColors} defaultChecked={colors.includes("yellow")}/>
-          <label>Yellow</label>
-        </div>
-        <div className="checkbox">
-          <Checkbox value={"silver"} onChange={handleColors} defaultChecked={colors.includes("silver")}/>
-          <label>Silver</label>
-        </div>
-        <div className="checkbox">
-          <Checkbox value={"brown"} onChange={handleColors} defaultChecked={colors.includes("brown")}/>
-          <label>Brown</label>
-        </div>
-      </div>
-      <Text fontWeight={"bold"} fontSize={"20px"} mt={"20px"}>
-       
-        Sort By Price
-      </Text>
+        </ColorCheckbox>
+        <ColorCheckbox>
+          <input
+            type="checkbox"
+            value="green"
+            onChange={handleColors}
+            defaultChecked={colors.includes("green")}
+          />
+          <label>Green</label>
+        </ColorCheckbox>
+      </ColorFilterContainer>
 
-      <div className="pricesort">
-        <div className="checkbox">
-         
-        <RadioGroup onChange={(e)=> handleSort(e,"price")}>
-            <Stack direction="row">
-              <Radio value="asc" defaultChecked={order === "asc"}>Ascending</Radio>
-              <Radio value="desc" defaultChecked={order === "desc"}>Descending</Radio>
-            </Stack>
-          </RadioGroup>
-        </div>
-      </div>
-      <Text fontWeight={"bold"} fontSize={"20px"} mt={"25px"}>
-        
-        Sort By Milage
-      </Text>
+      <SidebarTitle>Sort By Price</SidebarTitle>
+      <PriceSortContainer>
+        <SortRadioGroup onChange={(e) => handleSort(e, "price")}>
+          <label>
+            <input
+              type="radio"
+              value="asc"
+              defaultChecked={order === "asc"}
+              name="priceSort"
+            />
+            Ascending
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="desc"
+              defaultChecked={order === "desc"}
+              name="priceSort"
+            />
+            Descending
+          </label>
+        </SortRadioGroup>
+      </PriceSortContainer>
 
-      <div className="pricesort">
-        <div className="checkbox">
-          <RadioGroup onChange={(e)=> handleSort(e,"mileage")}>
-            <Stack direction="row">
-              <Radio value="asc" defaultChecked={order === "asc"}>Ascending</Radio>
-              <Radio value="desc" defaultChecked={order === "desc"}>Descending</Radio>
-            </Stack>
-          </RadioGroup>
-        </div>
-      </div>
-      
+      <SidebarTitle>Sort By Milage</SidebarTitle>
+      <MileageSortContainer>
+        <SortRadioGroup onChange={(e) => handleSort(e, "mileage")}>
+          <label>
+            <input
+              type="radio"
+              value="asc"
+              defaultChecked={order === "asc"}
+              name="mileageSort"
+            />
+            Ascending
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="desc"
+              defaultChecked={order === "desc"}
+              name="mileageSort"
+            />
+            Descending
+          </label>
+        </SortRadioGroup>
+      </MileageSortContainer>
 
-      <Button mt={"30px"} >Reset Filters</Button>
-    </DIV>
+      <ResetButton onClick={handleReset}>Reset Filters</ResetButton>
+    </SidebarContainer>
   );
 };
 
 export default Sidebar;
 
-const DIV = styled.div`
- 
- box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
- border-radius: 0.8rem;
+const SidebarContainer = styled.div`
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  border-radius: 0.8rem;
   display: flex;
   flex-direction: column;
   margin-right: 10px;
- position: sticky;
- margin-top: 70px;
+  position: sticky;
+  margin-top: 70px;
+`;
 
-  .colorsfilter {
-   
-    margin-top: 10px;
-  }
+const SidebarTitle = styled.div`
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 20px;
+`;
 
-  .checkbox {
-    width: 50px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    label {
-      margin-left: 10px;
-    }
+const ColorFilterContainer = styled.div`
+  margin-left: 12px;
+  margin-top: 10px;
+`;
+
+const ColorCheckbox = styled.div`
+  width: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  label {
+    margin-left: 10px;
   }
-  .pricesort {
-    
-    margin-top: 10px;
+`;
+
+const PriceSortContainer = styled.div`
+  margin-left: 12px;
+  margin-top: 10px;
+`;
+
+const SortRadioGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-left: 12px;
+
+  label {
+    margin-right: 10px;
+  }
+`;
+
+const MileageSortContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin: 12px;
+
+  label {
+    margin-right: 10px;
+  }
+`;
+
+const ResetButton = styled.button`
+  margin-top: 30px;
+  background-color: #f44336;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #d32f2f;
   }
 `;
