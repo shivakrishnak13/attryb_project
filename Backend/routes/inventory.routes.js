@@ -3,7 +3,7 @@ const { InventoryModel } = require("../model/inventory.model");
 
 const inventoryRouter = Router();
 
-inventoryRouter.post("/post-car", async (req, res) => {
+inventoryRouter.post("/add-car", async (req, res) => {
   try {
     const newInventory = new InventoryModel({ ...req.body });
     newInventory.save();
@@ -20,34 +20,15 @@ inventoryRouter.get("/cars", async (req, res) => {
   try {
     if (sort === "price" && order === "asc") {
       // sort by price ascending
-      let data = await InventoryModel.aggregate([
-        {
-          $lookup: {
-            from: "oem_specs",
-            localField: "oemSpecs",
-            foreignField: "_id",
-            as: "oemSpec",
-          },
-        },
-        { $unwind: "$oemSpec" },
-        { $sort: { "oemSpec.new_model_price": 1 } },
-      ]);
-      res.status(200).json({ data });
+      let data = await InventoryModel.find({}).sort({ "price": 1 });
+      return res.status(200).json({ data });
+
     } else if (sort === "price" && order === "desc") {
       // sort by price descending
-      let data = await InventoryModel.aggregate([
-        {
-          $lookup: {
-            from: "oem_specs",
-            localField: "oemSpecs",
-            foreignField: "_id",
-            as: "oemSpec",
-          },
-        },
-        { $unwind: "$oemSpec" },
-        { $sort: { "oemSpec.new_model_price": -1 } },
-      ]);
-      res.status(200).json({ data });
+      let data = await InventoryModel.find({}).sort({ "price": -1 });
+      return res.status(200).json({ data });
+
+
     }if (sort === "mileage" && order === "asc") {
       // sort by price ascending
       let data = await InventoryModel.aggregate([
@@ -62,7 +43,7 @@ inventoryRouter.get("/cars", async (req, res) => {
         { $unwind: "$oemSpec" },
         { $sort: { "oemSpec.mileage": 1 } },
       ]);
-      res.status(200).json({ data });
+      return res.status(200).json({ data });
     } else if (sort === "mileage" && order === "desc") {
       // sort by price descending
       let data = await InventoryModel.aggregate([
@@ -77,7 +58,7 @@ inventoryRouter.get("/cars", async (req, res) => {
         { $unwind: "$oemSpec" },
         { $sort: { "oemSpec.mileage": -1 } },
       ]);
-      res.status(200).json({ data });
+      return res.status(200).json({ data });
     }
     
     
@@ -91,7 +72,7 @@ inventoryRouter.get("/cars", async (req, res) => {
         .exec();
 
       const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
-      res.status(200).json({ data });
+      return res.status(200).json({ data });
     } else if (color && sort === "price" && order === "asc") {
       // Filter by color and sort by price ascending
 
@@ -100,13 +81,13 @@ inventoryRouter.get("/cars", async (req, res) => {
       const cdata = await InventoryModel.find({})
         .populate({
           path: "oemSpecs",
-          match: { colors: regex },
+          match: { colors: { $in: [regex] } },
         })
         .sort({ "oemSpecs.new_model_price": 1 })
         .exec();
 
       const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
-      res.status(200).json({ data });
+     return res.status(200).json({ data });
     } else if (color && sort === "price" && order === "desc") {
 
       // Filter by color and sort by price descending
@@ -116,13 +97,13 @@ inventoryRouter.get("/cars", async (req, res) => {
       const cdata = await InventoryModel.find({})
         .populate({
           path: "oemSpecs",
-          match: { colors: regex },
+          match: { colors: { $in: [regex] } },
         })
         .sort({ "oemSpecs.new_model_price": -1 })
         .exec();
 
       const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
-      res.status(200).json({ data });
+      return res.status(200).json({ data });
     }else if (color && sort === "mileage" && order === "asc") {
       // Filter by color and sort by mileage ascending
     
@@ -137,7 +118,7 @@ inventoryRouter.get("/cars", async (req, res) => {
         .exec();
     
       const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
-      res.status(200).json({ data });
+      return res.status(200).json({ data });
     
     } else if (color && sort === "mileage" && order === "desc") {
       // Filter by color and sort by mileage descending
@@ -147,18 +128,18 @@ inventoryRouter.get("/cars", async (req, res) => {
       const cdata = await InventoryModel.find({})
         .populate({
           path: "oemSpecs",
-          match: { colors: regex },
+          match: { colors: regex},
         })
         .sort({ "oemSpecs.mileage": -1 })
         .exec();
     
       const data = cdata.filter((el) => el.oemSpecs && el.oemSpecs.colors);
-      res.status(200).json({ data });
+      return res.status(200).json({ data });
     
     } else {
       let data = await InventoryModel.find({}).populate({ path: "oemSpecs" });
 
-      res.status(200).json({ data });
+      return res.status(200).json({ data });
     }
   } catch (error) {
     res.status(201).json({ error: error.message });
