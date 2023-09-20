@@ -1,4 +1,4 @@
-import { DEALER_AUTH, LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCSESS, LOGOUT, SIGNUP_SUCCESS } from "./actionType";
+import { DEALER_AUTH, LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT, SIGNUP_SUCCESS } from "./actionType";
 
 const intialstate = {
     isauth:false,
@@ -19,7 +19,7 @@ export const reducer = (state= intialstate,{type,payload,name}) => {
                 isLoading : true,
                 isError : false
             }
-        case LOGIN_SUCSESS:
+        case LOGIN_SUCCESS:
             return{
                 ...state,
                 isauth :true,
@@ -47,7 +47,8 @@ export const reducer = (state= intialstate,{type,payload,name}) => {
                 isdealerauth:true,
                 isauth:true,
                 isLoading:false,
-                isError:false
+                isError:false,
+                token : payload,
             }
         case LOGOUT:
             return {

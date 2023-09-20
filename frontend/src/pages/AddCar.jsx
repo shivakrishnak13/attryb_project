@@ -4,6 +4,7 @@ import axios from "axios";
 import { addCar } from "../redux/ProductReducer/action";
 import styled from "styled-components";
 import { toast } from "react-toastify";
+import CloudinaryUploadWidget from "../components/CloudinaryUpload";
 
 const initialState = {
   title: "",
@@ -26,24 +27,24 @@ const AddCar = () => {
   const [model, setModel] = useState("");
   const dispatch = useDispatch();
   const { isLoading } = useSelector((store) => store.CarsReducer);
+  const [imageURL,setimageURL] = useState("")
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCar({ ...car, [name]: (name === "price" || name === "kmOnOdometer" || name === "accidentsReported" || name === "previousBuyers" ) ? +value : value });
+    setCar({ ...car, [name]: (name === "price" || name === "kmOnOdometer" || name === "accidentsReported" || name === "previousBuyers" ) ? +value : value,image : imageURL });
   };
 
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
       if (search !== "") {
         axios
-          .get(`https://buy-cars.onrender.com/oem/specs?q=${search}`)
+          .get(`https://attryb-backend-blond.vercel.app/oem/specs?q=${search}`)
           .then((res) => {
             console.log(res.data);
             setOemSpecsData(res.data.specification);
           })
           .catch((err) => console.log(err));
       }
-      console.log("Perform search for:", search);
     }, 500);
 
     return () => {
@@ -79,6 +80,9 @@ const AddCar = () => {
     }
   };
 
+
+  
+ 
   return (
     <DIV>
       <h2>ADD YOUR CAR DETAILS HERE</h2>
@@ -136,21 +140,23 @@ const AddCar = () => {
           name="description"
         />
         <label>Price</label>
-        <textarea
+        <input
           placeholder="Price"
           onChange={handleChange}
           value={car.price}
           name="price"
         />
 
-        <label>Image</label>
+        <IMGUPLOAD>
+        <CloudinaryUploadWidget setimageURL={setimageURL}/>
+        </IMGUPLOAD>
         <input
           placeholder="Image"
-          onChange={handleChange}
-          value={car.image}
+          value={imageURL}
           name="image"
+          disabled
         />
-
+        
         <label>km On Odometer</label>
         <input
           placeholder="kmOnOdometer"
@@ -198,6 +204,8 @@ const AddCar = () => {
           value={car.originalPaint}
           name="originalPaint"
         >
+
+          <option value="">Select</option>
           <option value="Yes">Yes</option>
           <option value="No">No</option>
         </select>
@@ -212,38 +220,54 @@ const AddCar = () => {
 
 export default AddCar;
 
+const IMGUPLOAD = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+`
+
+
+
 const DIV = styled.div`
   h2 {
     color: #4267b2;
+    text-align: center;
+    margin-bottom: 20px;
   }
 
   .form {
-    width: 600px;
+    width: 500px;
     margin: auto;
     padding: 20px;
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-    border-radius: 0.6rem;
-    margin-top: 30px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: #fff;
   }
 
   .search-div {
     display: flex;
     flex-direction: column;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-    border-radius: 0.6rem;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    margin-top: 10px;
   }
 
   .card {
-    padding-left: 15px;
-    border: 0.5px solid black;
-    border-top: none;
-    border-left: none;
-    border-right: none;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .card:hover {
+    background-color: #f0f0f0;
   }
 
   label {
     font-weight: bold;
-    text-align: start; /* Align labels to the start position */
+    margin-bottom: 5px;
   }
 
   input,
@@ -254,20 +278,26 @@ const DIV = styled.div`
     margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 16px;
+  }
+
+  textarea {
+    height: 100px;
   }
 
   button {
-    background-color: blue;
-    color: white;
-    margin-top: 10px;
+    background-color: #4267b2;
+    color: #fff;
+    margin-top: 20px;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
   }
 
   button:disabled {
-    background-color: lightgray;
+    background-color: #ccc;
     cursor: not-allowed;
   }
 `;

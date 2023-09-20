@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { styled } from "styled-components";
 import { fetchLogin } from "../redux/AuthReducer/action";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import the CSS for toast styles
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { LOGIN_FAILURE } from "../redux/AuthReducer/actionType";
 const intialstate = {
   email: "",
   password: "",
@@ -16,19 +17,38 @@ const Login = () => {
 
   const [credentail, setcredentail] = useState(intialstate);
   const dispatch = useDispatch();
-  const { isLoading, isauth, isdealerauth,username } = useSelector(
+  const { isLoading, isauth, isdealerauth,username,isError } = useSelector(
     (store) => store.AuthReducer
   );
   const navigate = useNavigate();
-  console.log("isAuth", isauth);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setcredentail({ ...credentail, [name]: value });
   };
 
   const handleLogin = () => {
-    dispatch(fetchLogin(credentail)).then(()=>{
-      if (isauth && isdealerauth) {
+   dispatch(fetchLogin(credentail)).then(()=>{
+    if(isError){
+      toast.error("Email or Password are incorrect", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    }
+
+   }).catch((err)=>{
+    toast.error("Email or Password are incorrect", {
+      position: "top-center",
+      autoClose: 3000,
+    });
+   })
+   
+  };
+
+
+  
+  
+   
+     if (isauth && isdealerauth) {
         toast.success("Successfully Logged in as DEALER", {
           position: "top-center",
           autoClose: 6000,
@@ -42,22 +62,12 @@ const Login = () => {
         });
   
         navigate("/");
-      }
-      navigate("/")
-    }).catch(()=>{
-   
-      toast.error("Email or Password are incorrect", {
-        position: "top-center",
-        autoClose: 3000,
-      });
-       
-    })
-    
-    
-  };
+      } 
+
+  
 
   const handleClick = () => {
-    console.log("hai");
+    setShow(!show);
   };
 
   return (
@@ -80,10 +90,10 @@ const Login = () => {
             onChange={handleChange}
           />
           <div className="input-right-element">
-            <button onClick={handleClick}>{show ? "Hide" : "Show"}</button>
-            {/* {
-            (show)? <div  onClick={handleClick}><AiOutlineEyeInvisible onClick={()=> console.log("hello")} className="icon"/> </div>  : <AiOutlineEye className="icon" onClick={()=> setShow(false)}/>
-          } */}
+            {/* <button onClick={handleClick}>{show ? "Hide" : "Show"}</button> */}
+            {
+            (show)? <AiOutlineEyeInvisible onClick={()=>{ setShow(!show);}} className="icon"/>   : <AiOutlineEye className="icon" onClick={()=> { setShow(!show); }}/>
+          }
           </div>
         </div>
         <button className="button" onClick={handleLogin} disabled={isLoading}>

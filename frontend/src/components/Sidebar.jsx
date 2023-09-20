@@ -59,7 +59,7 @@ const Sidebar = () => {
             value="red"
             name="color"
             onChange={handleColors}
-            defaultChecked={colors === "red"}
+            checked={colors === "red"}
           />
           <label>Red</label>
         </ColorCheckbox>
@@ -69,7 +69,7 @@ const Sidebar = () => {
             value="blue"
             name="color"
             onChange={handleColors}
-            defaultChecked={colors === "blue"}
+            checked={colors === "blue"}
           />
           <label>Blue</label>
         </ColorCheckbox>
@@ -79,7 +79,7 @@ const Sidebar = () => {
             value="white"
             name="color"
             onChange={handleColors}
-            defaultChecked={colors === "white"}
+            checked={colors === "white"}
           />
           <label>White</label>
         </ColorCheckbox>
@@ -89,7 +89,7 @@ const Sidebar = () => {
             value="green"
             name="color"
             onChange={handleColors}
-            defaultChecked={colors === "green"}
+            checked={colors === "green"}
           />
           <label>Green</label>
         </ColorCheckbox>
@@ -99,7 +99,7 @@ const Sidebar = () => {
             name="color"
             value="black"
             onChange={handleColors}
-            defaultChecked={colors === "black"}
+            checked={colors === "black"}
           />
           <label>Black</label>
         </ColorCheckbox>
@@ -112,7 +112,7 @@ const Sidebar = () => {
             <input
               type="radio"
               value="asc"
-              defaultChecked={price === "asc"}
+              checked={price === "asc"}
               name="priceSort"
             />
             Ascending
@@ -121,7 +121,7 @@ const Sidebar = () => {
             <input
               type="radio"
               value="desc"
-              defaultChecked={price === "desc"}
+              checked={price === "desc"}
               name="priceSort"
             />
             Descending
@@ -136,7 +136,7 @@ const Sidebar = () => {
             <input
               type="radio"
               value="asc"
-              defaultChecked={mileage === "asc"}
+              checked={mileage === "asc"}
               name="mileageSort"
             />
             Ascending
@@ -145,7 +145,7 @@ const Sidebar = () => {
             <input
               type="radio"
               value="desc"
-              defaultChecked={mileage === "desc"}
+              checked={mileage === "desc"}
               name="mileageSort"
             />
             Descending
@@ -168,6 +168,8 @@ const SidebarContainer = styled.div`
   flex-direction: column;
   margin-right: 10px;
   position: sticky;
+  top: 80px;
+
   margin-top: 90px;
 `;
 

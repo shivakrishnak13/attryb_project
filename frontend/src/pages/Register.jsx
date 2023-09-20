@@ -17,7 +17,7 @@ const Register = () => {
   const [password, setPassord] = useState("");
   const [cpassword, setCPassword] = useState("");
   const navigate = useNavigate();
-  const {isLoading} = useSelector((store)=> store.AuthReducer)
+  const {isLoading,isError} = useSelector((store)=> store.AuthReducer)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDetails({ ...details, [name]: value });
@@ -39,6 +39,8 @@ const Register = () => {
       });
     }
   };
+
+  
 
   return (
     <DIV>

@@ -7,7 +7,7 @@ import {
   GET_CAR_SUCCSESS,
 } from "./actionType";
 
-let url = "https://attryb-project-9szk.onrender.com";
+let url = "https://attryb-backend-blond.vercel.app";
 
 export const getCars = (params) => (dispatch) => {
   if (
@@ -37,7 +37,6 @@ export const getCars = (params) => (dispatch) => {
 
 
 
-  console.log(params);
 
   dispatch({ type: CAR_REQUEST });
   axios
@@ -106,7 +105,7 @@ export const addCar = (payload) => (dispatch) => {
     .post(`${url}/inventory/add-car`, payload, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
       },
     })
     .then((res) => {
