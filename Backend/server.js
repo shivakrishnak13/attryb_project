@@ -6,6 +6,7 @@ const cloudinary = require("cloudinary");
 const { oemRouter } = require("./routes/oem.routes");
 const { inventoryRouter } = require("./routes/inventory.routes");
 const { authmiddleware } = require("./middlewares/auth.middleware");
+const { ImageUploadRouter } = require("./routes/ImageUpload.routes");
 require("dotenv").config();
 
 cloudinary.config({ 
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use("/user",userRouter);
 app.use("/oem",oemRouter);
 app.use("/inventory",authmiddleware,inventoryRouter);
+app.use('/upload',ImageUploadRouter);
 
 
 app.listen(process.env.PORT || 4000, async ()=>{
