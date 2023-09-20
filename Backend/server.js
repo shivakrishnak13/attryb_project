@@ -26,12 +26,16 @@ app.use("/inventory",authmiddleware,inventoryRouter);
 app.use('/upload',ImageUploadRouter);
 
 
-app.listen(process.env.PORT || 4000, async ()=>{
+(async function(){
     try {
         await connection;
         console.log("db is connected");
-        console.log("server is  running");
+        app.listen(process.env.PORT || 4000, async ()=>{
+           
+            console.log("server is  running");
+           
+        })
     } catch (error) {
-        console.log(error.message)
+        console.log(error)
     }
-})
+})()
